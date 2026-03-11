@@ -1,0 +1,1427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Split Time Wizard</title>
+  <style>
+    :root{
+      --bg1:#f7f9ff;
+      --bg2:#edf4ff;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --card:rgba(255,255,255,.86);
+      --line:rgba(15,23,42,.08);
+      --shadow:0 18px 50px rgba(15,23,42,.10);
+      --accent:#4f46e5;
+      --accent2:#7c3aed;
+      --good:#059669;
+      --warn:#d97706;
+      --bad:#dc2626;
+      --radius:24px;
+      --safeTop:env(safe-area-inset-top, 0px);
+      --safeBottom:env(safe-area-inset-bottom, 0px);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, #ffffff 0%, #f7f9ff 38%, #edf4ff 100%);
+    }
+
+    .app{
+      max-width:980px;
+      margin:0 auto;
+      padding:
+        calc(18px + var(--safeTop))
+        16px
+        calc(28px + var(--safeBottom));
+    }
+
+    .hidden{display:none!important}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+
+    .hero{
+      padding:28px 22px;
+      text-align:left;
+    }
+
+    .eyebrow{
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--accent);
+      margin-bottom:10px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(30px, 6vw, 48px);
+      line-height:1.02;
+      letter-spacing:-.05em;
+    }
+
+    .sub{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+      max-width:720px;
+    }
+
+    .btn{
+      min-height:50px;
+      border:none;
+      border-radius:16px;
+      padding:12px 18px;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:active{transform:scale(.985)}
+
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 10px 24px rgba(79,70,229,.20);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      color:var(--ink);
+      border:1px solid var(--line);
+    }
+
+    .btn-danger{
+      background:#fff;
+      color:var(--bad);
+      border:1px solid rgba(220,38,38,.14);
+    }
+
+    .start-actions{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .wizard{
+      padding:18px;
+    }
+
+    .wizard-top{
+      margin-bottom:18px;
+    }
+
+    .wizard-step-label{
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .wizard-title{
+      font-size:clamp(26px, 5vw, 38px);
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.05em;
+      margin:0;
+    }
+
+    .wizard-desc{
+      color:var(--muted);
+      margin-top:10px;
+      line-height:1.5;
+      font-size:15px;
+      max-width:680px;
+    }
+
+    .progress-shell{
+      margin-top:16px;
+      width:100%;
+      height:14px;
+      border-radius:999px;
+      overflow:hidden;
+      background:#e8eefc;
+      border:1px solid rgba(79,70,229,.10);
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .25s ease;
+    }
+
+    .field-wrap{
+      margin-top:20px;
+      display:grid;
+      gap:16px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-size:13px;
+      font-weight:800;
+      color:#334155;
+    }
+
+    input{
+      width:90%;
+      min-height:50px;
+      border-radius:16px;
+      border:1px solid rgba(15,23,42,.10);
+      background:#fff;
+      padding:12px 14px;
+      font:inherit;
+      color:var(--ink);
+      outline:none;
+    }
+
+    input:focus{
+      border-color:rgba(79,70,229,.45);
+      box-shadow:0 0 0 4px rgba(79,70,229,.10);
+    }
+
+    .inline{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    @media (max-width:720px){
+      .inline{grid-template-columns:1fr}
+    }
+
+    .wizard-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .review-list{
+      display:grid;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .review-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+    }
+
+    .review-name{
+      font-size:17px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      margin-bottom:4px;
+    }
+
+    .review-meta{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .dash-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    @media (max-width:920px){
+      .dash-grid{grid-template-columns:1fr}
+    }
+
+    .section{
+      padding:18px;
+    }
+
+    .section + .section{
+      border-top:1px solid var(--line);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+
+    @media (max-width:640px){
+      .stats{grid-template-columns:1fr}
+    }
+
+    .stat{
+      background:rgba(255,255,255,.86);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:14px;
+    }
+
+    .stat-k{
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .stat-v{
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:-.04em;
+      line-height:1;
+    }
+
+    .live-main{
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(242,246,255,.94));
+    }
+
+    .live-label{
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .current-name{
+      font-size:clamp(30px, 6vw, 44px);
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.05em;
+      margin:0 0 10px;
+    }
+
+    .current-meta{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .bar-group{
+      margin-top:16px;
+      display:grid;
+      gap:12px;
+    }
+
+    .bar-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .bar-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:8px;
+    }
+
+    .bar-title{
+      font-size:13px;
+      font-weight:800;
+      color:#334155;
+    }
+
+    .bar-value{
+      font-size:13px;
+      font-weight:800;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .bar-track{
+      width:100%;
+      height:14px;
+      border-radius:999px;
+      background:#e8eefc;
+      overflow:hidden;
+      border:1px solid rgba(79,70,229,.10);
+    }
+
+    .bar-fill{
+      width:0%;
+      height:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      transition:width .35s ease;
+    }
+
+    .timeline{
+      display:grid;
+      gap:12px;
+    }
+
+    .segment{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.86);
+    }
+
+    .segment.active{
+      border-color:rgba(79,70,229,.28);
+      box-shadow:0 10px 28px rgba(79,70,229,.12);
+      background:linear-gradient(180deg, rgba(248,249,255,.96), rgba(239,244,255,.96));
+    }
+
+    .segment.done{opacity:.62}
+
+    .num{
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      font-size:13px;
+      font-weight:800;
+      background:#eef2ff;
+      color:var(--accent);
+    }
+
+    .segment-name{
+      font-size:17px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      margin-bottom:4px;
+    }
+
+    .segment-meta{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .right{
+      text-align:right;
+    }
+
+    .right-top{
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .right-bottom{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .dash-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:38px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .mini-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .empty{
+      padding:16px;
+      border:1px dashed rgba(15,23,42,.14);
+      border-radius:18px;
+      color:var(--muted);
+      background:rgba(255,255,255,.55);
+    }
+
+
+
+.menu-wrap{
+  position:relative;
+}
+
+.menu-btn{
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid var(--line);
+  font:inherit;
+  font-size:22px;
+  font-weight:900;
+  line-height:1;
+  color:var(--ink);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+}
+
+.menu-dropdown{
+  position:absolute;
+  top:52px;
+  right:0;
+  min-width:210px;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 18px 40px rgba(15,23,42,.14);
+  padding:8px;
+  display:grid;
+  gap:6px;
+  z-index:50;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+.menu-item{
+  min-height:44px;
+  border:none;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid transparent;
+  padding:10px 12px;
+  text-align:left;
+  font:inherit;
+  font-weight:700;
+  color:var(--ink);
+  cursor:pointer;
+}
+
+.menu-item:hover{
+  background:#f8fafc;
+}
+
+.menu-item.danger{
+  color:var(--bad);
+}
+
+.hidden{
+  display:none !important;
+}
+
+
+.dashboard-shell{
+  display:grid;
+  gap:14px;
+}
+
+.screen-topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:2px 2px 0;
+}
+
+.screen-topbar-left{
+  min-width:0;
+}
+
+.screen-topbar-title{
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.topbar-menu-btn{
+  width:42px;
+  height:42px;
+  border-radius:999px;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  color:#111827;
+  font-size:24px;
+  font-weight:900;
+}
+
+.topbar-menu-btn:hover{
+  background:rgba(255,255,255,.55);
+}
+
+.topbar-menu-btn:active{
+  transform:scale(.96);
+}
+
+  </style>
+
+
+
+
+
+
+
+
+</head>
+<body>
+  <div class="app">
+    <section id="screenStart" class="card">
+      <div class="hero">
+        <div class="eyebrow">Split Time Engine</div>
+        <h1>Turn any block of time into a live game board.</h1>
+        <div class="sub">
+          First the wizard asks simple questions. Then the dashboard turns the answers into a live visual timeline with progress bars, time remaining, percentages, and segment tracking.
+        </div>
+        <div class="start-actions">
+          <button class="btn btn-primary" id="startWizardBtn">Start wizard</button>
+          <button class="btn btn-secondary" id="loadSavedBtn">Load saved session</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenWizard" class="card hidden" style="margin-top:16px;">
+      <div class="wizard">
+        <div class="wizard-top">
+          <div class="wizard-step-label" id="wizardStepLabel">Step 1</div>
+          <h2 class="wizard-title" id="wizardTitle">Let’s set up your session.</h2>
+          <div class="wizard-desc" id="wizardDesc">Answer one thing at a time so the setup feels easy.</div>
+          <div class="progress-shell">
+            <div class="progress-fill" id="wizardProgress"></div>
+          </div>
+        </div>
+
+        <div id="wizardBody"></div>
+
+        <div class="wizard-actions">
+          <button class="btn btn-secondary" id="backBtn">Back</button>
+          <button class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+      </div>
+    </section>
+
+
+<section id="screenDashboard" class="hidden" style="margin-top:16px;">
+  <div class="dashboard-shell">
+
+    <div class="screen-topbar">
+      <div class="screen-topbar-left">
+
+      </div>
+
+      <div class="menu-wrap">
+        <button class="menu-btn topbar-menu-btn" id="menuBtn" aria-label="Open menu">•••</button>
+
+        <div class="menu-dropdown hidden" id="menuDropdown">
+          <button class="menu-item" id="editSessionBtn">Back to wizard</button>
+          <button class="menu-item" id="restartSessionBtn">Restart from now</button>
+          <button class="menu-item danger" id="clearSessionBtn">Clear session</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="card">
+        <div class="section">
+          <div class="live-main">
+            <div class="live-label">Current segment</div>
+
+            <div class="current-name" id="currentName">Not running</div>
+            <div class="current-meta" id="currentMeta">Build a session to begin.</div>
+
+            <div class="mini-row">
+              <div class="pill" id="nextPill">Next: Nothing queued</div>
+              <div class="pill" id="countdownPill">00:00 left</div>
+              <div class="pill" id="totalRemainingPill">0m total left</div>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-card">
+                <div class="bar-top">
+                  <div class="bar-title">Current segment progress</div>
+                  <div class="bar-value" id="currentPercentText">0%</div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="currentBar"></div>
+                </div>
+              </div>
+
+              <div class="bar-card">
+                <div class="bar-top">
+                  <div class="bar-title">Full session progress</div>
+                  <div class="bar-value" id="sessionPercentText">0%</div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill" id="sessionBar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-k">Session name</div>
+              <div class="stat-v" id="statTitle" style="font-size:24px;">--</div>
+            </div>
+            <div class="stat">
+              <div class="stat-k">Segments</div>
+              <div class="stat-v" id="statSegments">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-k">Total minutes</div>
+              <div class="stat-v" id="statTotalMinutes">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-k">Finish time</div>
+              <div class="stat-v" id="statFinish">--:--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section">
+          <div class="live-label">Timeline</div>
+          <div class="timeline" id="timeline"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+
+const STORAGE_KEY = "split_time_wizard_v2";
+
+const els = {
+  screenStart: document.getElementById("screenStart"),
+  screenWizard: document.getElementById("screenWizard"),
+  screenDashboard: document.getElementById("screenDashboard"),
+
+  startWizardBtn: document.getElementById("startWizardBtn"),
+  loadSavedBtn: document.getElementById("loadSavedBtn"),
+
+  wizardStepLabel: document.getElementById("wizardStepLabel"),
+  wizardTitle: document.getElementById("wizardTitle"),
+  wizardDesc: document.getElementById("wizardDesc"),
+  wizardProgress: document.getElementById("wizardProgress"),
+  wizardBody: document.getElementById("wizardBody"),
+  backBtn: document.getElementById("backBtn"),
+  nextBtn: document.getElementById("nextBtn"),
+
+  currentName: document.getElementById("currentName"),
+  currentMeta: document.getElementById("currentMeta"),
+  nextPill: document.getElementById("nextPill"),
+  countdownPill: document.getElementById("countdownPill"),
+  totalRemainingPill: document.getElementById("totalRemainingPill"),
+  currentBar: document.getElementById("currentBar"),
+  sessionBar: document.getElementById("sessionBar"),
+  currentPercentText: document.getElementById("currentPercentText"),
+  sessionPercentText: document.getElementById("sessionPercentText"),
+  statTitle: document.getElementById("statTitle"),
+  statSegments: document.getElementById("statSegments"),
+  statTotalMinutes: document.getElementById("statTotalMinutes"),
+  statFinish: document.getElementById("statFinish"),
+  timeline: document.getElementById("timeline"),
+
+  editSessionBtn: document.getElementById("editSessionBtn"),
+  restartSessionBtn: document.getElementById("restartSessionBtn"),
+  clearSessionBtn: document.getElementById("clearSessionBtn"),
+
+  menuBtn: document.getElementById("menuBtn"),
+  menuDropdown: document.getElementById("menuDropdown")
+};
+
+const state = {
+  wizardStep: 0,
+  form: {
+    title: "",
+    startTime: "",
+    segmentCount: 4,
+    segments: []
+  },
+  timeline: []
+};
+
+function pad(n){
+  return String(n).padStart(2, "0");
+}
+
+function formatClock(date){
+  let h = date.getHours();
+  const m = pad(date.getMinutes());
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  return `${h}:${m} ${ampm}`;
+}
+
+function formatCountdown(ms){
+  if(ms <= 0) return "00:00 left";
+  const totalSec = Math.floor(ms / 1000);
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${pad(min)}:${pad(sec)} left`;
+}
+
+function formatMinutes(m){
+  if(m <= 0) return "0m";
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  if(h > 0 && min > 0) return `${h}h ${min}m`;
+  if(h > 0) return `${h}h`;
+  return `${min}m`;
+}
+
+function totalMinutes(){
+  return state.form.segments.reduce((sum, s) => sum + (Number(s.minutes) || 0), 0);
+}
+
+function getStepCount(){
+  return 4 + state.form.segmentCount;
+}
+
+function setScreen(name){
+  els.screenStart.classList.add("hidden");
+  els.screenWizard.classList.add("hidden");
+  els.screenDashboard.classList.add("hidden");
+
+  if(name === "start") els.screenStart.classList.remove("hidden");
+  if(name === "wizard") els.screenWizard.classList.remove("hidden");
+  if(name === "dashboard") els.screenDashboard.classList.remove("hidden");
+}
+
+function ensureSegmentArray(){
+  while(state.form.segments.length < state.form.segmentCount){
+    state.form.segments.push({ name: "", minutes: "" });
+  }
+
+  if(state.form.segments.length > state.form.segmentCount){
+    state.form.segments = state.form.segments.slice(0, state.form.segmentCount);
+  }
+}
+
+function closeMenu(){
+  if(els.menuDropdown){
+    els.menuDropdown.classList.add("hidden");
+  }
+}
+
+function toggleMenu(){
+  if(els.menuDropdown){
+    els.menuDropdown.classList.toggle("hidden");
+  }
+}
+
+function renderWizard(){
+  ensureSegmentArray();
+
+  const step = state.wizardStep;
+  const totalSteps = getStepCount();
+  const percent = ((step + 1) / totalSteps) * 100;
+
+  els.wizardStepLabel.textContent = `Step ${step + 1} of ${totalSteps}`;
+  els.wizardProgress.style.width = `${percent}%`;
+  els.backBtn.style.visibility = step === 0 ? "hidden" : "visible";
+
+  if(step === 0){
+    els.wizardTitle.textContent = "What should this session be called?";
+    els.wizardDesc.textContent = "Give the run a name so the dashboard feels real and specific.";
+    els.wizardBody.innerHTML = `
+      <div class="field-wrap">
+        <div>
+          <label for="wizTitle">Session name</label>
+          <input id="wizTitle" type="text" placeholder="Example: 60 Minute Build Sprint" value="${escapeHtml(state.form.title)}" />
+        </div>
+      </div>
+    `;
+    els.nextBtn.textContent = "Next";
+
+    const input = document.getElementById("wizTitle");
+    input.focus();
+    input.addEventListener("input", (e) => {
+      state.form.title = e.target.value;
+    });
+    input.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        els.nextBtn.click();
+      }
+    });
+    return;
+  }
+
+  if(step === 1){
+    els.wizardTitle.textContent = "When does it start?";
+    els.wizardDesc.textContent = "Pick the start time for the session.";
+    els.wizardBody.innerHTML = `
+      <div class="field-wrap">
+        <div>
+          <label for="wizStartTime">Start time</label>
+          <input id="wizStartTime" type="time" value="${escapeHtml(state.form.startTime)}" />
+        </div>
+        <div>
+          <button class="btn btn-secondary" id="useNowBtn" type="button">Use current time</button>
+        </div>
+      </div>
+    `;
+    els.nextBtn.textContent = "Next";
+
+    const input = document.getElementById("wizStartTime");
+    input.addEventListener("input", (e) => {
+      state.form.startTime = e.target.value;
+    });
+
+    document.getElementById("useNowBtn").addEventListener("click", () => {
+      const now = new Date();
+      const v = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      state.form.startTime = v;
+      input.value = v;
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        els.nextBtn.click();
+      }
+    });
+    return;
+  }
+
+  if(step === 2){
+    els.wizardTitle.textContent = "How many segments do you want?";
+    els.wizardDesc.textContent = "This decides how many rounds the wizard will ask you to fill out.";
+    els.wizardBody.innerHTML = `
+      <div class="field-wrap">
+        <div>
+          <label for="wizCount">Number of segments</label>
+          <input id="wizCount" type="number" min="1" max="20" step="1" value="${escapeHtml(state.form.segmentCount)}" />
+        </div>
+      </div>
+    `;
+    els.nextBtn.textContent = "Next";
+
+    const input = document.getElementById("wizCount");
+    input.addEventListener("input", (e) => {
+      let val = Number(e.target.value);
+      if(!Number.isFinite(val) || val < 1) val = 1;
+      if(val > 20) val = 20;
+      state.form.segmentCount = val;
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        els.nextBtn.click();
+      }
+    });
+    return;
+  }
+
+  if(step >= 3 && step < 3 + state.form.segmentCount){
+    const segIndex = step - 3;
+    const seg = state.form.segments[segIndex];
+
+    els.wizardTitle.textContent = `Segment ${segIndex + 1}`;
+    els.wizardDesc.textContent = "Give this segment a name and how many minutes it lasts.";
+    els.wizardBody.innerHTML = `
+      <div class="field-wrap">
+        <div>
+          <label for="segName">Segment name</label>
+          <input id="segName" type="text" placeholder="Example: Think" value="${escapeHtml(seg.name || "")}" />
+        </div>
+        <div>
+          <label for="segMinutes">Minutes</label>
+          <input id="segMinutes" type="number" min="1" step="1" placeholder="15" value="${escapeHtml(seg.minutes || "")}" />
+        </div>
+      </div>
+    `;
+    els.nextBtn.textContent = "Next";
+
+    const nameInput = document.getElementById("segName");
+    const minInput = document.getElementById("segMinutes");
+
+    nameInput.addEventListener("input", (e) => {
+      state.form.segments[segIndex].name = e.target.value;
+    });
+
+    minInput.addEventListener("input", (e) => {
+      state.form.segments[segIndex].minutes = e.target.value;
+    });
+
+    nameInput.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        els.nextBtn.click();
+      }
+    });
+
+    minInput.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        e.preventDefault();
+        els.nextBtn.click();
+      }
+    });
+    return;
+  }
+
+  if(step === 3 + state.form.segmentCount){
+    els.wizardTitle.textContent = "Review your build";
+    els.wizardDesc.textContent = "Make sure it looks right, then build the live dashboard.";
+
+    const reviewHtml = state.form.segments.map((seg, i) => `
+      <div class="review-item">
+        <div>
+          <div class="review-name">${escapeHtml(seg.name || `Segment ${i + 1}`)}</div>
+          <div class="review-meta">${escapeHtml(seg.minutes || 0)} minutes</div>
+        </div>
+        <div class="review-meta">#${i + 1}</div>
+      </div>
+    `).join("");
+
+    els.wizardBody.innerHTML = `
+      <div class="field-wrap">
+        <div class="inline">
+          <div>
+            <label>Session name</label>
+            <input value="${escapeHtml(state.form.title)}" disabled />
+          </div>
+          <div>
+            <label>Start time</label>
+            <input value="${escapeHtml(state.form.startTime)}" disabled />
+          </div>
+        </div>
+
+        <div class="inline">
+          <div>
+            <label>Segments</label>
+            <input value="${escapeHtml(state.form.segmentCount)}" disabled />
+          </div>
+          <div>
+            <label>Total minutes</label>
+            <input value="${escapeHtml(totalMinutes())}" disabled />
+          </div>
+        </div>
+
+        <div class="review-list">
+          ${reviewHtml || `<div class="empty">No segments added yet.</div>`}
+        </div>
+      </div>
+    `;
+    els.nextBtn.textContent = "Build dashboard";
+  }
+}
+
+function validateCurrentStep(){
+  const step = state.wizardStep;
+
+  if(step === 0){
+    if(!state.form.title.trim()){
+      alert("Give the session a name.");
+      return false;
+    }
+  }
+
+  if(step === 1){
+    if(!state.form.startTime){
+      alert("Choose a start time.");
+      return false;
+    }
+  }
+
+  if(step === 2){
+    if(!Number.isFinite(Number(state.form.segmentCount)) || Number(state.form.segmentCount) < 1){
+      alert("Enter a valid segment count.");
+      return false;
+    }
+    state.form.segmentCount = Math.min(20, Math.max(1, Number(state.form.segmentCount)));
+    ensureSegmentArray();
+  }
+
+  if(step >= 3 && step < 3 + state.form.segmentCount){
+    const segIndex = step - 3;
+    const seg = state.form.segments[segIndex];
+
+    if(!seg.name || !seg.name.trim()){
+      alert(`Give segment ${segIndex + 1} a name.`);
+      return false;
+    }
+
+    const mins = Number(seg.minutes);
+    if(!Number.isFinite(mins) || mins <= 0){
+      alert(`Give segment ${segIndex + 1} valid minutes.`);
+      return false;
+    }
+
+    state.form.segments[segIndex].minutes = mins;
+  }
+
+  return true;
+}
+
+function buildTimeline(){
+  const [h, m] = state.form.startTime.split(":").map(Number);
+  const start = new Date();
+  start.setHours(h, m, 0, 0);
+
+  let cursor = new Date(start);
+
+  state.timeline = state.form.segments.map((seg, index) => {
+    const segStart = new Date(cursor);
+    const segEnd = new Date(cursor.getTime() + Number(seg.minutes) * 60000);
+    cursor = segEnd;
+
+    return {
+      index,
+      name: seg.name,
+      minutes: Number(seg.minutes),
+      start: segStart.toISOString(),
+      end: segEnd.toISOString()
+    };
+  });
+
+  saveState();
+  renderDashboard();
+  setScreen("dashboard");
+  closeMenu();
+}
+
+function renderDashboard(){
+  els.statTitle.textContent = state.form.title || "--";
+  els.statSegments.textContent = state.form.segmentCount || 0;
+  els.statTotalMinutes.textContent = totalMinutes();
+
+  const finish = state.timeline.length
+    ? new Date(state.timeline[state.timeline.length - 1].end)
+    : null;
+
+  els.statFinish.textContent = finish ? formatClock(finish) : "--:--";
+
+  renderTimeline();
+  updateLive();
+}
+
+function renderTimeline(){
+  if(!state.timeline.length){
+    els.timeline.innerHTML = `<div class="empty">No timeline built yet.</div>`;
+    return;
+  }
+
+  const now = new Date();
+
+  els.timeline.innerHTML = state.timeline.map((seg, index) => {
+    const start = new Date(seg.start);
+    const end = new Date(seg.end);
+
+    let klass = "";
+    if(now >= end) klass = "done";
+    else if(now >= start && now < end) klass = "active";
+
+    return `
+      <div class="segment ${klass}">
+        <div class="num">${index + 1}</div>
+        <div>
+          <div class="segment-name">${escapeHtml(seg.name)}</div>
+          <div class="segment-meta">${formatClock(start)} to ${formatClock(end)} • ${seg.minutes} min</div>
+        </div>
+        <div class="right">
+          <div class="right-top">${seg.minutes}m</div>
+          <div class="right-bottom">${getSegmentStateText(start, end, now)}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function getSegmentStateText(start, end, now){
+  if(now < start) return "upcoming";
+  if(now >= end) return "done";
+  return "live";
+}
+
+function updateLive(){
+  if(!state.timeline.length) return;
+
+  const now = new Date();
+  const firstStart = new Date(state.timeline[0].start);
+  const finalEnd = new Date(state.timeline[state.timeline.length - 1].end);
+  const totalSessionMs = finalEnd - firstStart;
+
+  let currentIndex = state.timeline.findIndex((seg) => {
+    const start = new Date(seg.start);
+    const end = new Date(seg.end);
+    return now >= start && now < end;
+  });
+
+  if(currentIndex === -1){
+    if(now < firstStart){
+      els.currentName.textContent = "Waiting to start";
+      els.currentMeta.textContent = `${state.form.title} begins at ${formatClock(firstStart)}.`;
+      els.nextPill.textContent = `Next: ${state.timeline[0].name}`;
+      els.countdownPill.textContent = formatCountdown(firstStart - now);
+      els.totalRemainingPill.textContent = `${formatMinutes(Math.ceil((finalEnd - now) / 60000))} total left`;
+      els.currentBar.style.width = "0%";
+      els.sessionBar.style.width = "0%";
+      els.currentPercentText.textContent = "0%";
+      els.sessionPercentText.textContent = "0%";
+      renderTimeline();
+      return;
+    }
+
+    if(now >= finalEnd){
+      els.currentName.textContent = "Finished";
+      els.currentMeta.textContent = `${state.form.title} is complete.`;
+      els.nextPill.textContent = "Next: Nothing queued";
+      els.countdownPill.textContent = "00:00 left";
+      els.totalRemainingPill.textContent = "0m total left";
+      els.currentBar.style.width = "100%";
+      els.sessionBar.style.width = "100%";
+      els.currentPercentText.textContent = "100%";
+      els.sessionPercentText.textContent = "100%";
+      renderTimeline();
+      return;
+    }
+  }
+
+  const current = state.timeline[currentIndex];
+  const next = state.timeline[currentIndex + 1] || null;
+  const segStart = new Date(current.start);
+  const segEnd = new Date(current.end);
+
+  const segElapsed = now - segStart;
+  const segTotal = segEnd - segStart;
+  const segPct = Math.max(0, Math.min(100, (segElapsed / segTotal) * 100));
+
+  const sessionElapsed = now - firstStart;
+  const sessionPct = Math.max(0, Math.min(100, (sessionElapsed / totalSessionMs) * 100));
+
+  els.currentName.textContent = current.name;
+  els.currentMeta.textContent = `${formatClock(segStart)} to ${formatClock(segEnd)} • ${current.minutes} min`;
+  els.nextPill.textContent = `Next: ${next ? next.name : "Nothing after this"}`;
+  els.countdownPill.textContent = formatCountdown(segEnd - now);
+  els.totalRemainingPill.textContent = `${formatMinutes(Math.max(0, Math.ceil((finalEnd - now) / 60000)))} total left`;
+
+  els.currentBar.style.width = `${segPct}%`;
+  els.sessionBar.style.width = `${sessionPct}%`;
+  els.currentPercentText.textContent = `${Math.round(segPct)}%`;
+  els.sessionPercentText.textContent = `${Math.round(sessionPct)}%`;
+
+  renderTimeline();
+}
+
+function saveState(){
+  const payload = {
+    form: state.form,
+    timeline: state.timeline
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+function loadState(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) return false;
+
+  try{
+    const data = JSON.parse(raw);
+
+    state.form.title = data.form?.title || "";
+    state.form.startTime = data.form?.startTime || "";
+    state.form.segmentCount = Number(data.form?.segmentCount || 4);
+    state.form.segments = Array.isArray(data.form?.segments) ? data.form.segments : [];
+    state.timeline = Array.isArray(data.timeline) ? data.timeline : [];
+
+    ensureSegmentArray();
+    return true;
+  }catch(e){
+    console.error("Load failed", e);
+    return false;
+  }
+}
+
+function clearState(){
+  localStorage.removeItem(STORAGE_KEY);
+
+  state.wizardStep = 0;
+  state.form.title = "";
+  state.form.startTime = "";
+  state.form.segmentCount = 4;
+  state.form.segments = [];
+  state.timeline = [];
+
+  closeMenu();
+  setScreen("start");
+}
+
+function restartFromNow(){
+  const now = new Date();
+  state.form.startTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  buildTimeline();
+}
+
+function escapeHtml(str){
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+els.startWizardBtn.addEventListener("click", () => {
+  state.wizardStep = 0;
+  setScreen("wizard");
+  renderWizard();
+});
+
+els.loadSavedBtn.addEventListener("click", () => {
+  const ok = loadState();
+  if(!ok){
+    alert("No saved session found.");
+    return;
+  }
+  renderDashboard();
+  setScreen("dashboard");
+  closeMenu();
+});
+
+els.backBtn.addEventListener("click", () => {
+  if(state.wizardStep > 0){
+    state.wizardStep--;
+    renderWizard();
+  }
+});
+
+els.nextBtn.addEventListener("click", () => {
+  if(!validateCurrentStep()) return;
+
+  const lastStep = getStepCount() - 1;
+
+  if(state.wizardStep >= lastStep){
+    buildTimeline();
+    return;
+  }
+
+  state.wizardStep++;
+  renderWizard();
+});
+
+els.editSessionBtn.addEventListener("click", () => {
+  closeMenu();
+  state.wizardStep = 0;
+  setScreen("wizard");
+  renderWizard();
+});
+
+els.restartSessionBtn.addEventListener("click", () => {
+  closeMenu();
+  restartFromNow();
+});
+
+els.clearSessionBtn.addEventListener("click", () => {
+  closeMenu();
+  if(confirm("Clear the saved session?")){
+    clearState();
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if(!els.menuBtn || !els.menuDropdown) return;
+
+  const clickedMenuButton = els.menuBtn.contains(e.target);
+  const clickedInsideMenu = els.menuDropdown.contains(e.target);
+
+  if(clickedMenuButton){
+    toggleMenu();
+    return;
+  }
+
+  if(!clickedInsideMenu){
+    closeMenu();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape"){
+    closeMenu();
+  }
+});
+
+const hasSaved = loadState();
+
+if(hasSaved && state.timeline.length){
+  renderDashboard();
+  setScreen("dashboard");
+} else {
+  setScreen("start");
+}
+
+setInterval(() => {
+  if(!els.screenDashboard.classList.contains("hidden")){
+    updateLive();
+  }
+}, 1000);
+
+          
+  </script>
+</body>
+</html>
