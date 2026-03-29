@@ -492,6 +492,110 @@
       .topbar{align-items:flex-start}
       .flash-top{align-items:flex-start}
     }
+
+.settings-subtitle{
+  margin-top:4px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.settings-stack{
+  display:grid;
+  gap:14px;
+}
+
+.settings-card{
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:14px;
+  background:#fbfcff;
+}
+
+.settings-balance-card{
+  background:linear-gradient(180deg,#f7faff,#eef4ff);
+  border-color:#dbe7ff;
+}
+
+.settings-card-label{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  color:var(--muted);
+  font-weight:800;
+  margin-bottom:10px;
+}
+
+.budget-settings-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.budget-setting-box{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:12px;
+  background:#fff;
+}
+
+.budget-setting-name{
+  font-size:14px;
+  font-weight:800;
+  color:var(--text);
+}
+
+.settings-input{
+  width:100%;
+}
+
+.balance-input{
+  font-size:18px;
+  font-weight:700;
+}
+
+.settings-help{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.gas-box{
+  background:linear-gradient(180deg,#f8fbff,#eef5ff);
+}
+
+.groceries-box{
+  background:linear-gradient(180deg,#f7fff9,#eefcf2);
+}
+
+.play-box{
+  background:linear-gradient(180deg,#fffaf0,#fff4dc);
+}
+
+.savings-box{
+  background:linear-gradient(180deg,#faf7ff,#f3ecff);
+}
+
+.settings-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.settings-save-btn,
+.settings-reset-btn{
+  width:auto;
+}
+
+@media (max-width:860px){
+  .budget-settings-grid{
+    grid-template-columns:1fr;
+  }
+}
   </style>
 </head>
 <body>
@@ -646,26 +750,68 @@
     </div>
   </div>
 
-  <!-- Budget Settings Modal -->
-  <div class="overlay" id="settingsOverlay">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Budget Settings">
-      <div class="modal-header">
+ <!-- Budget Settings Modal -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Budget Settings">
+    <div class="modal-header">
+      <div>
         <div class="modal-title">Budget Settings</div>
-        <button class="close-btn" id="closeSettingsModalBtn">Close</button>
+        <div class="settings-subtitle">Set your balance first, then shape the monthly plan.</div>
+      </div>
+      <button class="close-btn" id="closeSettingsModalBtn">Close</button>
+    </div>
+
+    <div class="settings-stack">
+      <div class="settings-card settings-balance-card">
+        <div class="settings-card-label">Current Balance</div>
+        <input
+          type="number"
+          id="currentBalanceInput"
+          step="0.01"
+          min="0"
+          value="0"
+          placeholder="Current balance"
+          class="settings-input balance-input"
+        />
+        <div class="settings-help">This is what your budget is being measured against.</div>
       </div>
 
-      <div class="form-grid" style="grid-template-columns:1fr 1fr;">
-        <input type="number" id="currentBalanceInput" step="0.01" min="0" value="0" placeholder="Current balance" />
-        <input type="number" id="gasBudgetInput" step="0.01" min="0" value="180" placeholder="Gas budget" />
-        <input type="number" id="groceriesBudgetInput" step="0.01" min="0" value="190" placeholder="Groceries budget" />
-        <input type="number" id="playBudgetInput" step="0.01" min="0" value="40" placeholder="Play budget" />
-        <input type="number" id="bufferInput" step="0.01" min="0" value="94" placeholder="Potential savings" />
+      <div class="settings-card">
+        <div class="settings-card-label">Monthly Buckets</div>
+
+        <div class="budget-settings-grid">
+          <label class="budget-setting-box gas-box">
+            <span class="budget-setting-name">Gas</span>
+            <input type="number" id="gasBudgetInput" step="0.01" min="0" value="180" placeholder="Gas budget" class="settings-input" />
+          </label>
+
+          <label class="budget-setting-box groceries-box">
+            <span class="budget-setting-name">Groceries</span>
+            <input type="number" id="groceriesBudgetInput" step="0.01" min="0" value="190" placeholder="Groceries budget" class="settings-input" />
+          </label>
+
+          <label class="budget-setting-box play-box">
+            <span class="budget-setting-name">Play</span>
+            <input type="number" id="playBudgetInput" step="0.01" min="0" value="40" placeholder="Play budget" class="settings-input" />
+          </label>
+
+          <label class="budget-setting-box savings-box">
+            <span class="budget-setting-name">Potential Savings</span>
+            <input type="number" id="bufferInput" step="0.01" min="0" value="94" placeholder="Potential savings" class="settings-input" />
+          </label>
+        </div>
       </div>
 
-      <div class="row">
-        <button id="saveBudgetBtn" class="primary">Save Budget</button>
-        <button id="resetMonthBtn">Reset Logs</button>
+      <div class="settings-actions">
+        <button id="saveBudgetBtn" class="primary settings-save-btn">Save Budget</button>
+        <button id="resetMonthBtn" class="settings-reset-btn">Reset Logs</button>
       </div>
+
+      <div class="footer-note">Put your current checking balance in first, then adjust each category until the total fits comfortably.</div>
+    </div>
+  </div>
+</div>
+
 
       <div class="footer-note">Put your current checking balance in first, then set your category budgets until the tracker shows your total budget fits inside that balance.</div>
     </div>
@@ -688,129 +834,154 @@
     </div>
   </div>
 
-  <script>
-    const STORAGE_KEY = "dailyBudgetTracker_v1";
 
-    const defaultState = () => ({
-      currentBalance: 0,
-      budgets: {
-        gas: 180,
-        groceries: 190,
-        play: 40,
-        buffer: 94
-      },
-      logs: []
+
+<script>
+  const STORAGE_KEY = "dailyBudgetTracker_v1";
+
+  const defaultState = () => ({
+    currentBalance: 0,
+    budgets: {
+      gas: 180,
+      groceries: 190,
+      play: 40,
+      buffer: 94
+    },
+    logs: []
+  });
+
+  function getEl(id) {
+    return document.getElementById(id);
+  }
+
+  function normalizeCategory(category) {
+    if (category === "Potential Savings") return "Potential Savings";
+    if (category === "Buffer") return "Potential Savings";
+    return category || "";
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+
+      const parsed = JSON.parse(raw);
+
+      return {
+        currentBalance: Number(parsed?.currentBalance ?? 0),
+        budgets: {
+          gas: Number(parsed?.budgets?.gas ?? 180),
+          groceries: Number(parsed?.budgets?.groceries ?? 190),
+          play: Number(parsed?.budgets?.play ?? 40),
+          buffer: Number(parsed?.budgets?.buffer ?? 94)
+        },
+        logs: Array.isArray(parsed?.logs)
+          ? parsed.logs.map(log => ({
+              date: log?.date || "",
+              category: normalizeCategory(log?.category),
+              amount: Number(log?.amount || 0),
+              note: String(log?.note || "")
+            }))
+          : []
+      };
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  let state = loadState();
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function money(n) {
+    return "$" + Number(n || 0).toFixed(2);
+  }
+
+  function clampPercent(spent, budget) {
+    if (budget <= 0) return 0;
+    return Math.min((spent / budget) * 100, 100);
+  }
+
+  function escapeHtml(text) {
+    return String(text || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function totalsByCategory() {
+    const totals = {
+      Gas: 0,
+      Groceries: 0,
+      Play: 0,
+      "Potential Savings": 0
+    };
+
+    state.logs.forEach(log => {
+      const cat = normalizeCategory(log.category);
+      if (totals[cat] !== undefined) {
+        totals[cat] += Number(log.amount || 0);
+      }
     });
 
-    function normalizeCategory(category) {
-      if (category === "Potential Savings") return "Potential Savings";
-      if (category === "Buffer") return "Potential Savings";
-      return category;
+    return totals;
+  }
+
+  function exportJsonString() {
+    return JSON.stringify(state, null, 2);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Copied.");
+    } catch (e) {
+      alert("Could not auto-copy. The data is in the box now, so you can copy it manually.");
     }
+  }
 
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return defaultState();
-        const parsed = JSON.parse(raw);
-        return {
-          currentBalance: Number(parsed?.currentBalance ?? 0),
-          budgets: {
-            gas: Number(parsed?.budgets?.gas ?? 180),
-            groceries: Number(parsed?.budgets?.groceries ?? 190),
-            play: Number(parsed?.budgets?.play ?? 40),
-            buffer: Number(parsed?.budgets?.buffer ?? 94),
-          },
-          logs: Array.isArray(parsed?.logs)
-            ? parsed.logs.map(log => ({
-                ...log,
-                category: normalizeCategory(log.category)
-              }))
-            : []
-        };
-      } catch (e) {
-        return defaultState();
-      }
-    }
+  function openOverlay(id) {
+    const el = getEl(id);
+    if (el) el.classList.add("open");
+  }
 
-    let state = loadState();
+  function closeOverlay(id) {
+    const el = getEl(id);
+    if (el) el.classList.remove("open");
+  }
 
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
+  function closeAllOverlays() {
+    ["menuOverlay", "logOverlay", "settingsOverlay", "backupOverlay"].forEach(closeOverlay);
+  }
 
-    function money(n) {
-      return "$" + Number(n || 0).toFixed(2);
-    }
+  function render() {
+    saveState();
 
-    function clampPercent(spent, budget) {
-      if (budget <= 0) return 0;
-      return Math.min((spent / budget) * 100, 100);
-    }
+    const budgets = state.budgets;
+    const totals = totalsByCategory();
 
-    function escapeHtml(text) {
-      return String(text || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+    const totalBudget = budgets.gas + budgets.groceries + budgets.play + budgets.buffer;
+    const totalSpent = totals.Gas + totals.Groceries + totals.Play + totals["Potential Savings"];
+    const balanceAfterBudget = state.currentBalance - totalBudget;
 
-    function totalsByCategory() {
-      const totals = { Gas: 0, Groceries: 0, Play: 0, "Potential Savings": 0 };
-      state.logs.forEach(log => {
-        const cat = normalizeCategory(log.category);
-        if (totals[cat] !== undefined) {
-          totals[cat] += Number(log.amount || 0);
-        }
-      });
-      return totals;
-    }
+    const budgetTotal = getEl("budgetTotal");
+    const spentTotal = getEl("spentTotal");
+    const leftTotal = getEl("leftTotal");
+    const budgetFitNote = getEl("budgetFitNote");
 
-    function exportJsonString() {
-      return JSON.stringify(state, null, 2);
-    }
+    if (budgetTotal) budgetTotal.textContent = money(totalBudget);
+    if (spentTotal) spentTotal.textContent = money(totalSpent);
 
-    async function copyText(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Copied.");
-      } catch (e) {
-        alert("Could not auto-copy. The data is in the box now, so you can copy it manually.");
-      }
-    }
-
-    function openOverlay(id) {
-      document.getElementById(id).classList.add("open");
-    }
-
-    function closeOverlay(id) {
-      document.getElementById(id).classList.remove("open");
-    }
-
-    function closeAllOverlays() {
-      ["menuOverlay", "logOverlay", "settingsOverlay", "backupOverlay"].forEach(closeOverlay);
-    }
-
-    function render() {
-      saveState();
-
-      const budgets = state.budgets;
-      const totals = totalsByCategory();
-
-      const totalBudget = budgets.gas + budgets.groceries + budgets.play + budgets.buffer;
-      const totalSpent = totals.Gas + totals.Groceries + totals.Play + totals["Potential Savings"];
-      const balanceAfterBudget = state.currentBalance - totalBudget;
-
-      document.getElementById("budgetTotal").textContent = money(totalBudget);
-      document.getElementById("spentTotal").textContent = money(totalSpent);
-
-      const leftTotal = document.getElementById("leftTotal");
+    if (leftTotal) {
       leftTotal.textContent = money(balanceAfterBudget);
       leftTotal.className = "big " + (balanceAfterBudget < 0 ? "bad" : balanceAfterBudget <= 50 ? "warn" : "good");
+    }
 
-      const budgetFitNote = document.getElementById("budgetFitNote");
+    if (budgetFitNote) {
       if (state.currentBalance <= 0) {
         budgetFitNote.textContent = "Put in your current balance to test your budget";
       } else if (balanceAfterBudget < 0) {
@@ -818,179 +989,275 @@
       } else {
         budgetFitNote.textContent = "Your planned budget fits inside your current balance";
       }
+    }
 
-      document.getElementById("gasBudgetText").textContent = money(budgets.gas);
-      document.getElementById("groceriesBudgetText").textContent = money(budgets.groceries);
-      document.getElementById("playBudgetText").textContent = money(budgets.play);
-      document.getElementById("savingsBudgetText").textContent = money(budgets.buffer);
+    const gasBudgetText = getEl("gasBudgetText");
+    const groceriesBudgetText = getEl("groceriesBudgetText");
+    const playBudgetText = getEl("playBudgetText");
+    const savingsBudgetText = getEl("savingsBudgetText");
 
-      document.getElementById("gasSpent").textContent = money(totals.Gas);
-      document.getElementById("groceriesSpent").textContent = money(totals.Groceries);
-      document.getElementById("playSpent").textContent = money(totals.Play);
-      document.getElementById("savingsSpent").textContent = money(totals["Potential Savings"]);
+    if (gasBudgetText) gasBudgetText.textContent = money(budgets.gas);
+    if (groceriesBudgetText) groceriesBudgetText.textContent = money(budgets.groceries);
+    if (playBudgetText) playBudgetText.textContent = money(budgets.play);
+    if (savingsBudgetText) savingsBudgetText.textContent = money(budgets.buffer);
 
-      document.getElementById("gasLeft").textContent = money(budgets.gas - totals.Gas);
-      document.getElementById("groceriesLeft").textContent = money(budgets.groceries - totals.Groceries);
-      document.getElementById("playLeft").textContent = money(budgets.play - totals.Play);
-      document.getElementById("savingsLeft").textContent = money(budgets.buffer - totals["Potential Savings"]);
+    const gasSpent = getEl("gasSpent");
+    const groceriesSpent = getEl("groceriesSpent");
+    const playSpent = getEl("playSpent");
+    const savingsSpent = getEl("savingsSpent");
 
-      document.getElementById("gasBar").style.width = clampPercent(totals.Gas, budgets.gas) + "%";
-      document.getElementById("groceriesBar").style.width = clampPercent(totals.Groceries, budgets.groceries) + "%";
-      document.getElementById("playBar").style.width = clampPercent(totals.Play, budgets.play) + "%";
-      document.getElementById("savingsBar").style.width = clampPercent(totals["Potential Savings"], budgets.buffer) + "%";
+    if (gasSpent) gasSpent.textContent = money(totals.Gas);
+    if (groceriesSpent) groceriesSpent.textContent = money(totals.Groceries);
+    if (playSpent) playSpent.textContent = money(totals.Play);
+    if (savingsSpent) savingsSpent.textContent = money(totals["Potential Savings"]);
 
-      document.getElementById("gasTotalBox").textContent = money(totals.Gas);
-      document.getElementById("groceriesTotalBox").textContent = money(totals.Groceries);
-      document.getElementById("playTotalBox").textContent = money(totals.Play);
-      document.getElementById("savingsTotalBox").textContent = money(totals["Potential Savings"]);
-      document.getElementById("logCountBox").textContent = state.logs.length;
+    const gasLeft = getEl("gasLeft");
+    const groceriesLeft = getEl("groceriesLeft");
+    const playLeft = getEl("playLeft");
+    const savingsLeft = getEl("savingsLeft");
 
-      document.getElementById("currentBalanceInput").value = state.currentBalance;
-      document.getElementById("gasBudgetInput").value = budgets.gas;
-      document.getElementById("groceriesBudgetInput").value = budgets.groceries;
-      document.getElementById("playBudgetInput").value = budgets.play;
-      document.getElementById("bufferInput").value = budgets.buffer;
+    if (gasLeft) gasLeft.textContent = money(budgets.gas - totals.Gas);
+    if (groceriesLeft) groceriesLeft.textContent = money(budgets.groceries - totals.Groceries);
+    if (playLeft) playLeft.textContent = money(budgets.play - totals.Play);
+    if (savingsLeft) savingsLeft.textContent = money(budgets.buffer - totals["Potential Savings"]);
 
-      const body = document.getElementById("logBody");
-      body.innerHTML = "";
+    const gasBar = getEl("gasBar");
+    const groceriesBar = getEl("groceriesBar");
+    const playBar = getEl("playBar");
+    const savingsBar = getEl("savingsBar");
 
-      const sortedLogs = [...state.logs].sort((a,b) => (b.date || "").localeCompare(a.date || ""));
+    if (gasBar) gasBar.style.width = clampPercent(totals.Gas, budgets.gas) + "%";
+    if (groceriesBar) groceriesBar.style.width = clampPercent(totals.Groceries, budgets.groceries) + "%";
+    if (playBar) playBar.style.width = clampPercent(totals.Play, budgets.play) + "%";
+    if (savingsBar) savingsBar.style.width = clampPercent(totals["Potential Savings"], budgets.buffer) + "%";
 
-      if (!sortedLogs.length) {
-        body.innerHTML = `<div class="empty">No logs yet.</div>`;
-      } else {
-        sortedLogs.forEach((log) => {
-          const normalized = normalizeCategory(log.category);
+    const gasTotalBox = getEl("gasTotalBox");
+    const groceriesTotalBox = getEl("groceriesTotalBox");
+    const playTotalBox = getEl("playTotalBox");
+    const savingsTotalBox = getEl("savingsTotalBox");
+    const logCountBox = getEl("logCountBox");
 
-          const actualIndex = state.logs.findIndex(
-            x =>
-              x.date === log.date &&
-              normalizeCategory(x.category) === normalized &&
-              Number(x.amount) === Number(log.amount) &&
-              String(x.note || "") === String(log.note || "")
-          );
+    if (gasTotalBox) gasTotalBox.textContent = money(totals.Gas);
+    if (groceriesTotalBox) groceriesTotalBox.textContent = money(totals.Groceries);
+    if (playTotalBox) playTotalBox.textContent = money(totals.Play);
+    if (savingsTotalBox) savingsTotalBox.textContent = money(totals["Potential Savings"]);
+    if (logCountBox) logCountBox.textContent = state.logs.length;
 
-          const item = document.createElement("div");
-          item.className = "log-item";
-          item.innerHTML = `
-            <div class="log-head">
-              <div class="log-left">
-                <div class="log-date">${escapeHtml(log.date || "")}</div>
-                <div class="log-cat">${escapeHtml(normalized)}</div>
-              </div>
-              <div class="log-amount">${money(log.amount)}</div>
+    const currentBalanceInput = getEl("currentBalanceInput");
+    const gasBudgetInput = getEl("gasBudgetInput");
+    const groceriesBudgetInput = getEl("groceriesBudgetInput");
+    const playBudgetInput = getEl("playBudgetInput");
+    const bufferInput = getEl("bufferInput");
+
+    if (currentBalanceInput) currentBalanceInput.value = state.currentBalance;
+    if (gasBudgetInput) gasBudgetInput.value = budgets.gas;
+    if (groceriesBudgetInput) groceriesBudgetInput.value = budgets.groceries;
+    if (playBudgetInput) playBudgetInput.value = budgets.play;
+    if (bufferInput) bufferInput.value = budgets.buffer;
+
+    const body = getEl("logBody");
+    if (!body) return;
+
+    body.innerHTML = "";
+
+    const sortedLogs = [...state.logs].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+    if (!sortedLogs.length) {
+      body.innerHTML = `<div class="empty">No logs yet.</div>`;
+    } else {
+      sortedLogs.forEach((log) => {
+        const normalized = normalizeCategory(log.category);
+
+        const actualIndex = state.logs.findIndex(
+          x =>
+            x.date === log.date &&
+            normalizeCategory(x.category) === normalized &&
+            Number(x.amount) === Number(log.amount) &&
+            String(x.note || "") === String(log.note || "")
+        );
+
+        const item = document.createElement("div");
+        item.className = "log-item";
+        item.innerHTML = `
+          <div class="log-head">
+            <div class="log-left">
+              <div class="log-date">${escapeHtml(log.date || "")}</div>
+              <div class="log-cat">${escapeHtml(normalized)}</div>
             </div>
-            <div class="log-note">${escapeHtml(log.note || "No note")}</div>
-            <div class="log-actions">
-              <button data-index="${actualIndex}" class="delete-btn">Delete Log</button>
-            </div>
-          `;
-          body.appendChild(item);
-        });
-      }
-
-      document.querySelectorAll(".delete-btn").forEach(btn => {
-        btn.onclick = () => {
-          const idx = Number(btn.dataset.index);
-          if (idx >= 0) {
-            const ok = confirm("Delete this log?");
-            if (!ok) return;
-            state.logs.splice(idx, 1);
-            render();
-          }
-        };
+            <div class="log-amount">${money(log.amount)}</div>
+          </div>
+          <div class="log-note">${escapeHtml(log.note || "No note")}</div>
+          <div class="log-actions">
+            <button data-index="${actualIndex}" class="delete-btn">Delete Log</button>
+          </div>
+        `;
+        body.appendChild(item);
       });
     }
 
-    document.getElementById("menuBtn").addEventListener("click", () => {
-      openOverlay("menuOverlay");
+    document.querySelectorAll(".delete-btn").forEach(btn => {
+      btn.onclick = () => {
+        const idx = Number(btn.dataset.index);
+        if (idx >= 0) {
+          const ok = confirm("Delete this log?");
+          if (!ok) return;
+          state.logs.splice(idx, 1);
+          render();
+        }
+      };
     });
+  }
 
-    document.getElementById("logToggleBtn").addEventListener("click", () => {
-      openOverlay("logOverlay");
-    });
+  function wireEvents() {
+    const menuBtn = getEl("menuBtn");
+    if (menuBtn) {
+      menuBtn.addEventListener("click", () => {
+        openOverlay("menuOverlay");
+      });
+    }
 
-    document.getElementById("openBudgetSettingsBtn").addEventListener("click", () => {
-      closeOverlay("menuOverlay");
-      openOverlay("settingsOverlay");
-    });
+    const logToggleBtn = getEl("logToggleBtn");
+    if (logToggleBtn) {
+      logToggleBtn.addEventListener("click", () => {
+        openOverlay("logOverlay");
+      });
+    }
 
-    document.getElementById("openBackupBtn").addEventListener("click", () => {
-      closeOverlay("menuOverlay");
-      openOverlay("backupOverlay");
-    });
+    const openBudgetSettingsBtn = getEl("openBudgetSettingsBtn");
+    if (openBudgetSettingsBtn) {
+      openBudgetSettingsBtn.addEventListener("click", () => {
+        closeOverlay("menuOverlay");
+        openOverlay("settingsOverlay");
+      });
+    }
 
-    document.getElementById("closeMenuSheetBtn").addEventListener("click", () => {
-      closeOverlay("menuOverlay");
-    });
+    const openBackupBtn = getEl("openBackupBtn");
+    if (openBackupBtn) {
+      openBackupBtn.addEventListener("click", () => {
+        closeOverlay("menuOverlay");
+        openOverlay("backupOverlay");
+      });
+    }
 
-    document.getElementById("closeLogModalBtn").addEventListener("click", () => {
-      closeOverlay("logOverlay");
-    });
+    const closeMenuSheetBtn = getEl("closeMenuSheetBtn");
+    if (closeMenuSheetBtn) {
+      closeMenuSheetBtn.addEventListener("click", () => {
+        closeOverlay("menuOverlay");
+      });
+    }
 
-    document.getElementById("closeSettingsModalBtn").addEventListener("click", () => {
-      closeOverlay("settingsOverlay");
-    });
+    const closeLogModalBtn = getEl("closeLogModalBtn");
+    if (closeLogModalBtn) {
+      closeLogModalBtn.addEventListener("click", () => {
+        closeOverlay("logOverlay");
+      });
+    }
 
-    document.getElementById("closeBackupModalBtn").addEventListener("click", () => {
-      closeOverlay("backupOverlay");
-    });
+    const closeSettingsModalBtn = getEl("closeSettingsModalBtn");
+    if (closeSettingsModalBtn) {
+      closeSettingsModalBtn.addEventListener("click", () => {
+        closeOverlay("settingsOverlay");
+      });
+    }
+
+    const closeBackupModalBtn = getEl("closeBackupModalBtn");
+    if (closeBackupModalBtn) {
+      closeBackupModalBtn.addEventListener("click", () => {
+        closeOverlay("backupOverlay");
+      });
+    }
 
     ["menuOverlay", "logOverlay", "settingsOverlay", "backupOverlay"].forEach(id => {
-      const overlay = document.getElementById(id);
+      const overlay = getEl(id);
+      if (!overlay) return;
       overlay.addEventListener("click", (e) => {
         if (e.target === overlay) closeOverlay(id);
       });
     });
 
-    document.getElementById("addLogBtn").addEventListener("click", () => {
-      const date = document.getElementById("logDate").value;
-      const category = normalizeCategory(document.getElementById("logCategory").value);
-      const amount = Number(document.getElementById("logAmount").value);
-      const note = document.getElementById("logNote").value.trim();
+    const addLogBtn = getEl("addLogBtn");
+    if (addLogBtn) {
+      addLogBtn.addEventListener("click", () => {
+        const date = getEl("logDate")?.value || "";
+        const category = normalizeCategory(getEl("logCategory")?.value || "");
+        const amount = Number(getEl("logAmount")?.value || 0);
+        const note = (getEl("logNote")?.value || "").trim();
 
-      if (!date) return alert("Pick a date.");
-      if (!amount || amount <= 0) return alert("Enter a valid amount.");
+        if (!date) return alert("Pick a date.");
+        if (!amount || amount <= 0) return alert("Enter a valid amount.");
+        if (!category) return alert("Pick a category.");
 
-      state.logs.push({ date, category, amount, note });
-      document.getElementById("logAmount").value = "";
-      document.getElementById("logNote").value = "";
-      render();
-      closeOverlay("logOverlay");
-    });
+        state.logs.push({ date, category, amount, note });
 
-    document.getElementById("saveBudgetBtn").addEventListener("click", () => {
-      state.currentBalance = Number(document.getElementById("currentBalanceInput").value || 0);
-      state.budgets.gas = Number(document.getElementById("gasBudgetInput").value || 0);
-      state.budgets.groceries = Number(document.getElementById("groceriesBudgetInput").value || 0);
-      state.budgets.play = Number(document.getElementById("playBudgetInput").value || 0);
-      state.budgets.buffer = Number(document.getElementById("bufferInput").value || 0);
-      render();
-      closeOverlay("settingsOverlay");
-    });
+        if (getEl("logAmount")) getEl("logAmount").value = "";
+        if (getEl("logNote")) getEl("logNote").value = "";
 
-    document.getElementById("resetMonthBtn").addEventListener("click", () => {
-      if (!confirm("Clear all saved logs?")) return;
-      state.logs = [];
-      render();
-      closeOverlay("settingsOverlay");
-    });
+        render();
+        closeOverlay("logOverlay");
+      });
+    }
 
-    document.getElementById("copyDataBtn").addEventListener("click", async () => {
-      const text = exportJsonString();
-      document.getElementById("backupBox").value = text;
-      await copyText(text);
-    });
+    const saveBudgetBtn = getEl("saveBudgetBtn");
+    if (saveBudgetBtn) {
+      saveBudgetBtn.addEventListener("click", () => {
+        const currentBalanceInput = getEl("currentBalanceInput");
+        const gasBudgetInput = getEl("gasBudgetInput");
+        const groceriesBudgetInput = getEl("groceriesBudgetInput");
+        const playBudgetInput = getEl("playBudgetInput");
+        const bufferInput = getEl("bufferInput");
+
+        state.currentBalance = Number(currentBalanceInput?.value || state.currentBalance || 0);
+        state.budgets.gas = Number(gasBudgetInput?.value || 0);
+        state.budgets.groceries = Number(groceriesBudgetInput?.value || 0);
+        state.budgets.play = Number(playBudgetInput?.value || 0);
+        state.budgets.buffer = Number(bufferInput?.value || 0);
+
+        render();
+        closeOverlay("settingsOverlay");
+      });
+    }
+
+    const resetMonthBtn = getEl("resetMonthBtn");
+    if (resetMonthBtn) {
+      resetMonthBtn.addEventListener("click", () => {
+        if (!confirm("Clear all saved logs?")) return;
+        state.logs = [];
+        render();
+        closeOverlay("settingsOverlay");
+      });
+    }
+
+    const copyDataBtn = getEl("copyDataBtn");
+    if (copyDataBtn) {
+      copyDataBtn.addEventListener("click", async () => {
+        const text = exportJsonString();
+        const backupBox = getEl("backupBox");
+        if (backupBox) backupBox.value = text;
+        await copyText(text);
+      });
+    }
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") closeAllOverlays();
     });
+  }
+
+  function setDefaultDate() {
+    const logDate = getEl("logDate");
+    if (!logDate) return;
 
     const today = new Date();
     const pad = n => String(n).padStart(2, "0");
-    document.getElementById("logDate").value = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+    logDate.value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+  }
 
-    render();
-  </script>
+  wireEvents();
+  setDefaultDate();
+  render();
+</script>
+
+
+
+
 </body>
 </html>
