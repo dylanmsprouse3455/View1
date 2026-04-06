@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daily Budget Tracker</title>
+  <title>Flexible Budget Tracker</title>
   <style>
     :root{
       --bg1:#f8fbff;
@@ -17,8 +17,6 @@
       --bad:#b42318;
       --blue:#2563eb;
       --blue-soft:#eef4ff;
-      --purple:#7c3aed;
-      --mix-btn:linear-gradient(90deg,#dbeafe 0%, #ede9fe 55%, #ddd6fe 100%);
       --shadow:0 12px 30px rgba(17,24,39,.06);
       --radius:22px;
       --sheet-shadow:0 20px 50px rgba(15,23,42,.18);
@@ -134,7 +132,7 @@
     .log-toggle-btn{
       width:auto;
       border:1px solid #c7d2fe;
-      background:var(--mix-btn);
+      background:linear-gradient(90deg,#dbeafe 0%, #ede9fe 55%, #ddd6fe 100%);
       color:#4338ca;
       font-weight:800;
       box-shadow:0 8px 20px rgba(99,102,241,.10);
@@ -179,12 +177,8 @@
       height:100%;
       border-radius:999px;
       transition:width .2s ease;
+      background:linear-gradient(90deg,#60a5fa,#2563eb);
     }
-
-    .fill.gas{background:linear-gradient(90deg,#60a5fa,#2563eb)}
-    .fill.groceries{background:linear-gradient(90deg,#34d399,#127a45)}
-    .fill.play{background:linear-gradient(90deg,#fbbf24,#d97706)}
-    .fill.savings{background:linear-gradient(90deg,#c4b5fd,#7c3aed)}
 
     .grid{
       display:grid;
@@ -225,7 +219,7 @@
 
     .totals{
       display:grid;
-      grid-template-columns:repeat(5,minmax(0,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
       gap:10px;
       margin-top:12px;
     }
@@ -306,14 +300,20 @@
     .log-actions{
       display:flex;
       justify-content:flex-end;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .delete-btn,.secondary-btn{
+      width:auto;
+      background:#fff;
+      font-weight:800;
     }
 
     .delete-btn{
-      width:auto;
       background:#fff5f5;
       border-color:#fecaca;
       color:#b42318;
-      font-weight:800;
     }
 
     .empty{
@@ -326,7 +326,7 @@
     }
 
     input,select,button,textarea{
-      width:95%;
+      width:100%;
       border:1px solid var(--line);
       border-radius:16px;
       padding:12px 12px;
@@ -347,6 +347,12 @@
       border-color:var(--blue);
     }
 
+    .danger{
+      background:#fff5f5;
+      color:#b42318;
+      border-color:#fecaca;
+    }
+
     .footer-note{
       margin-top:10px;
       color:var(--muted);
@@ -354,7 +360,7 @@
     }
 
     textarea{
-      min-height:140px;
+      min-height:160px;
       resize:vertical;
       font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
       font-size:13px;
@@ -365,6 +371,23 @@
       grid-template-columns:1fr 1fr 1fr auto;
       gap:10px;
       margin-bottom:12px;
+    }
+
+    .settings-grid{
+      display:grid;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .settings-row{
+      display:grid;
+      grid-template-columns:1.2fr .8fr auto auto;
+      gap:10px;
+      align-items:center;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fbfcff;
     }
 
     .row{
@@ -393,7 +416,7 @@
     }
 
     .modal{
-      width:min(100%, 560px);
+      width:min(100%, 620px);
       background:#fff;
       border:1px solid var(--line);
       border-radius:26px;
@@ -485,126 +508,21 @@
 
     @media (max-width:860px){
       .grid{grid-template-columns:1fr}
-      .totals{grid-template-columns:1fr 1fr}
       .form-grid{grid-template-columns:1fr}
+      .settings-row{grid-template-columns:1fr 1fr}
       h1{font-size:24px}
       .big{font-size:26px}
       .topbar{align-items:flex-start}
       .flash-top{align-items:flex-start}
     }
-
-.settings-subtitle{
-  margin-top:4px;
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.4;
-}
-
-.settings-stack{
-  display:grid;
-  gap:14px;
-}
-
-.settings-card{
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:14px;
-  background:#fbfcff;
-}
-
-.settings-balance-card{
-  background:linear-gradient(180deg,#f7faff,#eef4ff);
-  border-color:#dbe7ff;
-}
-
-.settings-card-label{
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.04em;
-  color:var(--muted);
-  font-weight:800;
-  margin-bottom:10px;
-}
-
-.budget-settings-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.budget-setting-box{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:12px;
-  background:#fff;
-}
-
-.budget-setting-name{
-  font-size:14px;
-  font-weight:800;
-  color:var(--text);
-}
-
-.settings-input{
-  width:100%;
-}
-
-.balance-input{
-  font-size:18px;
-  font-weight:700;
-}
-
-.settings-help{
-  margin-top:8px;
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.4;
-}
-
-.gas-box{
-  background:linear-gradient(180deg,#f8fbff,#eef5ff);
-}
-
-.groceries-box{
-  background:linear-gradient(180deg,#f7fff9,#eefcf2);
-}
-
-.play-box{
-  background:linear-gradient(180deg,#fffaf0,#fff4dc);
-}
-
-.savings-box{
-  background:linear-gradient(180deg,#faf7ff,#f3ecff);
-}
-
-.settings-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.settings-save-btn,
-.settings-reset-btn{
-  width:auto;
-}
-
-@media (max-width:860px){
-  .budget-settings-grid{
-    grid-template-columns:1fr;
-  }
-}
   </style>
 </head>
 <body>
   <div class="wrap">
-
     <div class="topbar">
       <div class="title-wrap">
-        <div class="pill">daily budget</div>
-        <h1>Gas, groceries, and play tracker</h1>
+        <div class="pill">dynamic budget</div>
+        <h1>Flexible Budget Tracker</h1>
       </div>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu">
         <div class="menu-icon">
@@ -623,50 +541,20 @@
         <button class="log-toggle-btn" id="logToggleBtn">Log New</button>
       </div>
 
-      <div class="budget-list">
-        <div class="budget-row">
-          <div class="budget-top">
-            <span>Gas</span>
-            <span><span id="gasSpent">$0.00</span> / <span id="gasBudgetText">$180.00</span></span>
-          </div>
-          <div class="mini"><span id="gasLeft">$180.00</span> left</div>
-          <div class="bar"><div class="fill gas" id="gasBar" style="width:0%"></div></div>
-        </div>
-
-        <div class="budget-row">
-          <div class="budget-top">
-            <span>Groceries</span>
-            <span><span id="groceriesSpent">$0.00</span> / <span id="groceriesBudgetText">$190.00</span></span>
-          </div>
-          <div class="mini"><span id="groceriesLeft">$190.00</span> left</div>
-          <div class="bar"><div class="fill groceries" id="groceriesBar" style="width:0%"></div></div>
-        </div>
-
-        <div class="budget-row">
-          <div class="budget-top">
-            <span>Play</span>
-            <span><span id="playSpent">$0.00</span> / <span id="playBudgetText">$40.00</span></span>
-          </div>
-          <div class="mini"><span id="playLeft">$40.00</span> left</div>
-          <div class="bar"><div class="fill play" id="playBar" style="width:0%"></div></div>
-        </div>
-
-        <div class="budget-row">
-          <div class="budget-top">
-            <span>Potential Savings</span>
-            <span><span id="savingsSpent">$0.00</span> / <span id="savingsBudgetText">$94.00</span></span>
-          </div>
-          <div class="mini"><span id="savingsLeft">$94.00</span> left</div>
-          <div class="bar"><div class="fill savings" id="savingsBar" style="width:0%"></div></div>
-        </div>
-      </div>
+      <div class="budget-list" id="budgetList"></div>
     </div>
 
     <div class="grid">
       <div class="card card-pad">
-        <div class="label">Monthly Budget Total</div>
-        <div class="big" id="budgetTotal">$504.00</div>
-        <p id="budgetFitNote">Fits inside current balance</p>
+        <div class="label">Current Balance</div>
+        <div class="big" id="currentBalanceText">$0.00</div>
+        <p>Editable in settings</p>
+      </div>
+
+      <div class="card card-pad">
+        <div class="label">Budget Total</div>
+        <div class="big" id="budgetTotal">$0.00</div>
+        <p>Total of all category budgets</p>
       </div>
 
       <div class="card card-pad">
@@ -676,56 +564,47 @@
       </div>
 
       <div class="card card-pad">
+        <div class="label">Left In Budget</div>
+        <div class="big good" id="leftTotal">$0.00</div>
+        <p>Budget total minus spending</p>
+      </div>
+
+      <div class="card card-pad">
         <div class="label">Balance After Budget</div>
-        <div class="big good" id="leftTotal">$504.00</div>
-        <p>Current balance minus total planned budget</p>
+        <div class="big good" id="afterBudgetTotal">$0.00</div>
+        <p>Current balance minus remaining budget</p>
+      </div>
+
+      <div class="card card-pad">
+        <div class="label">Log Count</div>
+        <div class="big" id="logCountBig">0</div>
+        <p>Total saved expense logs</p>
       </div>
     </div>
 
     <div class="card history-wrap">
-      <div class="subhead">Category history</div>
+      <div class="subhead">Category totals</div>
+      <div class="totals" id="totalsGrid"></div>
 
-      <div class="totals">
-        <div class="total-box">
-          <div class="label">Gas Total</div>
-          <div class="n" id="gasTotalBox">$0.00</div>
-        </div>
-        <div class="total-box">
-          <div class="label">Groceries Total</div>
-          <div class="n" id="groceriesTotalBox">$0.00</div>
-        </div>
-        <div class="total-box">
-          <div class="label">Play Total</div>
-          <div class="n" id="playTotalBox">$0.00</div>
-        </div>
-        <div class="total-box">
-          <div class="label">Potential Savings Used</div>
-          <div class="n" id="savingsTotalBox">$0.00</div>
-        </div>
-        <div class="total-box">
-          <div class="label">Log Count</div>
-          <div class="n" id="logCountBox">0</div>
-        </div>
-      </div>
-
+      <div class="subhead" style="margin-top:18px;">Category history</div>
       <div class="history-list" id="logBody"></div>
 
-      <div class="footer-note">Potential Savings is the bucket for unexpected but needed spending that does not fit gas, groceries, or play.</div>
+      <div class="footer-note">
+        All categories are dynamic now. Add, rename, or delete them in settings. Data stays saved in local storage on this device/browser.
+      </div>
     </div>
   </div>
 
-  <!-- Menu Action Sheet -->
   <div class="overlay" id="menuOverlay">
     <div class="action-sheet" role="dialog" aria-modal="true" aria-label="Menu">
       <div class="sheet-group">
-        <button class="sheet-item" id="openBudgetSettingsBtn">Budget Settings</button>
+        <button class="sheet-item" id="openSettingsBtn">Settings</button>
         <button class="sheet-item" id="openBackupBtn">Backup and Copy</button>
       </div>
       <button class="sheet-cancel" id="closeMenuSheetBtn">Cancel</button>
     </div>
   </div>
 
-  <!-- Log Modal -->
   <div class="overlay" id="logOverlay">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Log New">
       <div class="modal-header">
@@ -735,89 +614,43 @@
 
       <div class="form-grid">
         <input type="date" id="logDate" />
-        <select id="logCategory">
-          <option value="Gas">Gas</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Play">Play</option>
-          <option value="Potential Savings">Potential Savings</option>
-        </select>
+        <select id="logCategory"></select>
         <input type="number" id="logAmount" placeholder="Amount" step="0.01" min="0" />
         <button class="primary" id="addLogBtn">Add</button>
       </div>
 
-      <input type="text" id="logNote" placeholder="Optional note. Example: unexpected house thing, random needed expense, emergency item." />
-      <div class="footer-note">Use Potential Savings when it was needed but does not belong in gas, groceries, or play.</div>
+      <input type="text" id="logNote" placeholder="Optional note." />
+      <div class="footer-note">Pick any category you created in settings.</div>
     </div>
   </div>
 
- <!-- Budget Settings Modal -->
-<div class="overlay" id="settingsOverlay">
-  <div class="modal" role="dialog" aria-modal="true" aria-label="Budget Settings">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title">Budget Settings</div>
-        <div class="settings-subtitle">Set your balance first, then shape the monthly plan.</div>
-      </div>
-      <button class="close-btn" id="closeSettingsModalBtn">Close</button>
-    </div>
-
-    <div class="settings-stack">
-      <div class="settings-card settings-balance-card">
-        <div class="settings-card-label">Current Balance</div>
-        <input
-          type="number"
-          id="currentBalanceInput"
-          step="0.01"
-          min="0"
-          value="0"
-          placeholder="Current balance"
-          class="settings-input balance-input"
-        />
-        <div class="settings-help">This is what your budget is being measured against.</div>
+  <div class="overlay" id="settingsOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="modal-header">
+        <div class="modal-title">Settings</div>
+        <button class="close-btn" id="closeSettingsModalBtn">Close</button>
       </div>
 
-      <div class="settings-card">
-        <div class="settings-card-label">Monthly Buckets</div>
+      <div class="label">Current Balance</div>
+      <input type="number" id="currentBalanceInput" step="0.01" min="0" placeholder="Current balance" style="margin-bottom:14px;" />
 
-        <div class="budget-settings-grid">
-          <label class="budget-setting-box gas-box">
-            <span class="budget-setting-name">Gas</span>
-            <input type="number" id="gasBudgetInput" step="0.01" min="0" value="180" placeholder="Gas budget" class="settings-input" />
-          </label>
+      <div class="label">Categories</div>
+      <div class="settings-grid" id="categorySettingsList"></div>
 
-          <label class="budget-setting-box groceries-box">
-            <span class="budget-setting-name">Groceries</span>
-            <input type="number" id="groceriesBudgetInput" step="0.01" min="0" value="190" placeholder="Groceries budget" class="settings-input" />
-          </label>
-
-          <label class="budget-setting-box play-box">
-            <span class="budget-setting-name">Play</span>
-            <input type="number" id="playBudgetInput" step="0.01" min="0" value="40" placeholder="Play budget" class="settings-input" />
-          </label>
-
-          <label class="budget-setting-box savings-box">
-            <span class="budget-setting-name">Potential Savings</span>
-            <input type="number" id="bufferInput" step="0.01" min="0" value="94" placeholder="Potential savings" class="settings-input" />
-          </label>
-        </div>
+      <div class="row" style="margin-bottom:14px;">
+        <button id="addCategoryBtn">Add Category</button>
       </div>
 
-      <div class="settings-actions">
-        <button id="saveBudgetBtn" class="primary settings-save-btn">Save Budget</button>
-        <button id="resetMonthBtn" class="settings-reset-btn">Reset Logs</button>
+      <div class="row">
+        <button id="saveSettingsBtn" class="primary">Save Settings</button>
+        <button id="resetLogsBtn">Reset Logs</button>
+        <button id="resetAllBtn" class="danger">Reset All</button>
       </div>
 
-      <div class="footer-note">Put your current checking balance in first, then adjust each category until the total fits comfortably.</div>
-    </div>
-  </div>
-</div>
-
-
-      <div class="footer-note">Put your current checking balance in first, then set your category budgets until the tracker shows your total budget fits inside that balance.</div>
+      <div class="footer-note">Deleting a category removes its past logs too, so use that carefully.</div>
     </div>
   </div>
 
-  <!-- Backup Modal -->
   <div class="overlay" id="backupOverlay">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Backup and Copy">
       <div class="modal-header">
@@ -827,437 +660,485 @@
 
       <div class="row" style="margin-bottom:10px;">
         <button id="copyDataBtn">Copy Data</button>
+        <button id="loadDataBtn">Load From Box</button>
       </div>
 
-      <textarea id="backupBox" placeholder="Copied tracker data will appear here."></textarea>
-      <div class="footer-note">Tap Copy Data to place your current tracker JSON in the box and try copying it to your clipboard.</div>
+      <textarea id="backupBox" placeholder="Tracker JSON will appear here. You can also paste JSON here and load it."></textarea>
+      <div class="footer-note">This lets you time-capsule your tracker or restore it later.</div>
     </div>
   </div>
 
+  <script>
+    const STORAGE_KEY = "flexibleBudgetTracker_v1";
 
+    function uid() {
+      return "id_" + Math.random().toString(36).slice(2, 10);
+    }
 
-<script>
-  const STORAGE_KEY = "dailyBudgetTracker_v1";
-
-  const defaultState = () => ({
-    currentBalance: 0,
-    budgets: {
-      gas: 180,
-      groceries: 190,
-      play: 40,
-      buffer: 94
-    },
-    logs: []
-  });
-
-  function getEl(id) {
-    return document.getElementById(id);
-  }
-
-  function normalizeCategory(category) {
-    if (category === "Potential Savings") return "Potential Savings";
-    if (category === "Buffer") return "Potential Savings";
-    return category || "";
-  }
-
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return defaultState();
-
-      const parsed = JSON.parse(raw);
-
+    function defaultState() {
       return {
-        currentBalance: Number(parsed?.currentBalance ?? 0),
-        budgets: {
-          gas: Number(parsed?.budgets?.gas ?? 180),
-          groceries: Number(parsed?.budgets?.groceries ?? 190),
-          play: Number(parsed?.budgets?.play ?? 40),
-          buffer: Number(parsed?.budgets?.buffer ?? 94)
-        },
-        logs: Array.isArray(parsed?.logs)
-          ? parsed.logs.map(log => ({
-              date: log?.date || "",
-              category: normalizeCategory(log?.category),
-              amount: Number(log?.amount || 0),
-              note: String(log?.note || "")
-            }))
-          : []
+        currentBalance: 0,
+        categories: [
+          { id: uid(), name: "Gas", budget: 180 },
+          { id: uid(), name: "Groceries", budget: 190 },
+          { id: uid(), name: "Play", budget: 40 },
+          { id: uid(), name: "Potential Savings", budget: 94 }
+        ],
+        logs: []
       };
-    } catch (e) {
-      return defaultState();
-    }
-  }
-
-  let state = loadState();
-
-  function saveState() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }
-
-  function money(n) {
-    return "$" + Number(n || 0).toFixed(2);
-  }
-
-  function clampPercent(spent, budget) {
-    if (budget <= 0) return 0;
-    return Math.min((spent / budget) * 100, 100);
-  }
-
-  function escapeHtml(text) {
-    return String(text || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function totalsByCategory() {
-    const totals = {
-      Gas: 0,
-      Groceries: 0,
-      Play: 0,
-      "Potential Savings": 0
-    };
-
-    state.logs.forEach(log => {
-      const cat = normalizeCategory(log.category);
-      if (totals[cat] !== undefined) {
-        totals[cat] += Number(log.amount || 0);
-      }
-    });
-
-    return totals;
-  }
-
-  function exportJsonString() {
-    return JSON.stringify(state, null, 2);
-  }
-
-  async function copyText(text) {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert("Copied.");
-    } catch (e) {
-      alert("Could not auto-copy. The data is in the box now, so you can copy it manually.");
-    }
-  }
-
-  function openOverlay(id) {
-    const el = getEl(id);
-    if (el) el.classList.add("open");
-  }
-
-  function closeOverlay(id) {
-    const el = getEl(id);
-    if (el) el.classList.remove("open");
-  }
-
-  function closeAllOverlays() {
-    ["menuOverlay", "logOverlay", "settingsOverlay", "backupOverlay"].forEach(closeOverlay);
-  }
-
-  function render() {
-    saveState();
-
-    const budgets = state.budgets;
-    const totals = totalsByCategory();
-
-    const totalBudget = budgets.gas + budgets.groceries + budgets.play + budgets.buffer;
-    const totalSpent = totals.Gas + totals.Groceries + totals.Play + totals["Potential Savings"];
-    const balanceAfterBudget = state.currentBalance - totalBudget;
-
-    const budgetTotal = getEl("budgetTotal");
-    const spentTotal = getEl("spentTotal");
-    const leftTotal = getEl("leftTotal");
-    const budgetFitNote = getEl("budgetFitNote");
-
-    if (budgetTotal) budgetTotal.textContent = money(totalBudget);
-    if (spentTotal) spentTotal.textContent = money(totalSpent);
-
-    if (leftTotal) {
-      leftTotal.textContent = money(balanceAfterBudget);
-      leftTotal.className = "big " + (balanceAfterBudget < 0 ? "bad" : balanceAfterBudget <= 50 ? "warn" : "good");
     }
 
-    if (budgetFitNote) {
-      if (state.currentBalance <= 0) {
-        budgetFitNote.textContent = "Put in your current balance to test your budget";
-      } else if (balanceAfterBudget < 0) {
-        budgetFitNote.textContent = "Your planned budget is bigger than your current balance";
-      } else {
-        budgetFitNote.textContent = "Your planned budget fits inside your current balance";
-      }
+    function money(n) {
+      return "$" + Number(n || 0).toFixed(2);
     }
 
-    const gasBudgetText = getEl("gasBudgetText");
-    const groceriesBudgetText = getEl("groceriesBudgetText");
-    const playBudgetText = getEl("playBudgetText");
-    const savingsBudgetText = getEl("savingsBudgetText");
+    function clampPercent(spent, budget) {
+      if (budget <= 0) return 0;
+      return Math.min((spent / budget) * 100, 100);
+    }
 
-    if (gasBudgetText) gasBudgetText.textContent = money(budgets.gas);
-    if (groceriesBudgetText) groceriesBudgetText.textContent = money(budgets.groceries);
-    if (playBudgetText) playBudgetText.textContent = money(budgets.play);
-    if (savingsBudgetText) savingsBudgetText.textContent = money(budgets.buffer);
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-    const gasSpent = getEl("gasSpent");
-    const groceriesSpent = getEl("groceriesSpent");
-    const playSpent = getEl("playSpent");
-    const savingsSpent = getEl("savingsSpent");
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
 
-    if (gasSpent) gasSpent.textContent = money(totals.Gas);
-    if (groceriesSpent) groceriesSpent.textContent = money(totals.Groceries);
-    if (playSpent) playSpent.textContent = money(totals.Play);
-    if (savingsSpent) savingsSpent.textContent = money(totals["Potential Savings"]);
+        const parsed = JSON.parse(raw);
+        const state = defaultState();
 
-    const gasLeft = getEl("gasLeft");
-    const groceriesLeft = getEl("groceriesLeft");
-    const playLeft = getEl("playLeft");
-    const savingsLeft = getEl("savingsLeft");
+        state.currentBalance = Number(parsed?.currentBalance || 0);
 
-    if (gasLeft) gasLeft.textContent = money(budgets.gas - totals.Gas);
-    if (groceriesLeft) groceriesLeft.textContent = money(budgets.groceries - totals.Groceries);
-    if (playLeft) playLeft.textContent = money(budgets.play - totals.Play);
-    if (savingsLeft) savingsLeft.textContent = money(budgets.buffer - totals["Potential Savings"]);
+        if (Array.isArray(parsed?.categories) && parsed.categories.length) {
+          state.categories = parsed.categories.map(cat => ({
+            id: String(cat.id || uid()),
+            name: String(cat.name || "Category"),
+            budget: Number(cat.budget || 0)
+          }));
+        }
 
-    const gasBar = getEl("gasBar");
-    const groceriesBar = getEl("groceriesBar");
-    const playBar = getEl("playBar");
-    const savingsBar = getEl("savingsBar");
+        if (Array.isArray(parsed?.logs)) {
+          state.logs = parsed.logs
+            .map(log => ({
+              id: String(log.id || uid()),
+              date: String(log.date || ""),
+              categoryId: String(log.categoryId || ""),
+              amount: Number(log.amount || 0),
+              note: String(log.note || "")
+            }))
+            .filter(log => log.categoryId && log.date && log.amount > 0);
+        }
 
-    if (gasBar) gasBar.style.width = clampPercent(totals.Gas, budgets.gas) + "%";
-    if (groceriesBar) groceriesBar.style.width = clampPercent(totals.Groceries, budgets.groceries) + "%";
-    if (playBar) playBar.style.width = clampPercent(totals.Play, budgets.play) + "%";
-    if (savingsBar) savingsBar.style.width = clampPercent(totals["Potential Savings"], budgets.buffer) + "%";
-
-    const gasTotalBox = getEl("gasTotalBox");
-    const groceriesTotalBox = getEl("groceriesTotalBox");
-    const playTotalBox = getEl("playTotalBox");
-    const savingsTotalBox = getEl("savingsTotalBox");
-    const logCountBox = getEl("logCountBox");
-
-    if (gasTotalBox) gasTotalBox.textContent = money(totals.Gas);
-    if (groceriesTotalBox) groceriesTotalBox.textContent = money(totals.Groceries);
-    if (playTotalBox) playTotalBox.textContent = money(totals.Play);
-    if (savingsTotalBox) savingsTotalBox.textContent = money(totals["Potential Savings"]);
-    if (logCountBox) logCountBox.textContent = state.logs.length;
-
-    const currentBalanceInput = getEl("currentBalanceInput");
-    const gasBudgetInput = getEl("gasBudgetInput");
-    const groceriesBudgetInput = getEl("groceriesBudgetInput");
-    const playBudgetInput = getEl("playBudgetInput");
-    const bufferInput = getEl("bufferInput");
-
-    if (currentBalanceInput) currentBalanceInput.value = state.currentBalance;
-    if (gasBudgetInput) gasBudgetInput.value = budgets.gas;
-    if (groceriesBudgetInput) groceriesBudgetInput.value = budgets.groceries;
-    if (playBudgetInput) playBudgetInput.value = budgets.play;
-    if (bufferInput) bufferInput.value = budgets.buffer;
-
-    const body = getEl("logBody");
-    if (!body) return;
-
-    body.innerHTML = "";
-
-    const sortedLogs = [...state.logs].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-
-    if (!sortedLogs.length) {
-      body.innerHTML = `<div class="empty">No logs yet.</div>`;
-    } else {
-      sortedLogs.forEach((log) => {
-        const normalized = normalizeCategory(log.category);
-
-        const actualIndex = state.logs.findIndex(
-          x =>
-            x.date === log.date &&
-            normalizeCategory(x.category) === normalized &&
-            Number(x.amount) === Number(log.amount) &&
-            String(x.note || "") === String(log.note || "")
+        state.logs = state.logs.filter(log =>
+          state.categories.some(cat => cat.id === log.categoryId)
         );
 
+        return state;
+      } catch (e) {
+        return defaultState();
+      }
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getCategoryById(id) {
+      return state.categories.find(cat => cat.id === id);
+    }
+
+    function getSpentForCategory(categoryId) {
+      return state.logs
+        .filter(log => log.categoryId === categoryId)
+        .reduce((sum, log) => sum + Number(log.amount || 0), 0);
+    }
+
+    function getBudgetTotal() {
+      return state.categories.reduce((sum, cat) => sum + Number(cat.budget || 0), 0);
+    }
+
+    function getSpentTotal() {
+      return state.logs.reduce((sum, log) => sum + Number(log.amount || 0), 0);
+    }
+
+    function exportJsonString() {
+      return JSON.stringify(state, null, 2);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert("Copied.");
+      } catch (e) {
+        alert("Could not auto-copy. The data is in the box now so you can copy it manually.");
+      }
+    }
+
+    function openOverlay(id) {
+      document.getElementById(id).classList.add("open");
+    }
+
+    function closeOverlay(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function closeAllOverlays() {
+      ["menuOverlay", "logOverlay", "settingsOverlay", "backupOverlay"].forEach(closeOverlay);
+    }
+
+    function renderBudgetList() {
+      const budgetList = document.getElementById("budgetList");
+      budgetList.innerHTML = "";
+
+      if (!state.categories.length) {
+        budgetList.innerHTML = `<div class="empty">No categories yet. Add one in settings.</div>`;
+        return;
+      }
+
+      state.categories.forEach(cat => {
+        const spent = getSpentForCategory(cat.id);
+        const left = Number(cat.budget) - spent;
+        const percent = clampPercent(spent, Number(cat.budget));
+
+        const row = document.createElement("div");
+        row.className = "budget-row";
+        row.innerHTML = `
+          <div class="budget-top">
+            <span>${escapeHtml(cat.name)}</span>
+            <span>${money(spent)} / ${money(cat.budget)}</span>
+          </div>
+          <div class="mini">${money(left)} left</div>
+          <div class="bar"><div class="fill" style="width:${percent}%"></div></div>
+        `;
+        budgetList.appendChild(row);
+      });
+    }
+
+    function renderSummaryCards() {
+      const budgetTotal = getBudgetTotal();
+      const spentTotal = getSpentTotal();
+      const left = budgetTotal - spentTotal;
+      const afterBudget = Number(state.currentBalance) - left;
+
+      document.getElementById("currentBalanceText").textContent = money(state.currentBalance);
+      document.getElementById("budgetTotal").textContent = money(budgetTotal);
+      document.getElementById("spentTotal").textContent = money(spentTotal);
+      document.getElementById("logCountBig").textContent = state.logs.length;
+
+      const leftEl = document.getElementById("leftTotal");
+      leftEl.textContent = money(left);
+      leftEl.className = "big " + (left < 0 ? "bad" : left <= 50 ? "warn" : "good");
+
+      const afterBudgetEl = document.getElementById("afterBudgetTotal");
+      afterBudgetEl.textContent = money(afterBudget);
+      afterBudgetEl.className = "big " + (afterBudget < 0 ? "bad" : afterBudget <= 50 ? "warn" : "good");
+    }
+
+    function renderTotalsGrid() {
+      const totalsGrid = document.getElementById("totalsGrid");
+      totalsGrid.innerHTML = "";
+
+      state.categories.forEach(cat => {
+        const total = getSpentForCategory(cat.id);
+        const box = document.createElement("div");
+        box.className = "total-box";
+        box.innerHTML = `
+          <div class="label">${escapeHtml(cat.name)} Total</div>
+          <div class="n">${money(total)}</div>
+        `;
+        totalsGrid.appendChild(box);
+      });
+
+      const logsBox = document.createElement("div");
+      logsBox.className = "total-box";
+      logsBox.innerHTML = `
+        <div class="label">Log Count</div>
+        <div class="n">${state.logs.length}</div>
+      `;
+      totalsGrid.appendChild(logsBox);
+    }
+
+    function renderLogCategoryOptions() {
+      const select = document.getElementById("logCategory");
+      select.innerHTML = "";
+
+      if (!state.categories.length) {
+        select.innerHTML = `<option value="">No categories</option>`;
+        return;
+      }
+
+      state.categories.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat.id;
+        option.textContent = cat.name;
+        select.appendChild(option);
+      });
+    }
+
+    function renderLogs() {
+      const body = document.getElementById("logBody");
+      body.innerHTML = "";
+
+      const sortedLogs = [...state.logs].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+      if (!sortedLogs.length) {
+        body.innerHTML = `<div class="empty">No logs yet.</div>`;
+        return;
+      }
+
+      sortedLogs.forEach(log => {
+        const cat = getCategoryById(log.categoryId);
         const item = document.createElement("div");
         item.className = "log-item";
         item.innerHTML = `
           <div class="log-head">
             <div class="log-left">
-              <div class="log-date">${escapeHtml(log.date || "")}</div>
-              <div class="log-cat">${escapeHtml(normalized)}</div>
+              <div class="log-date">${escapeHtml(log.date)}</div>
+              <div class="log-cat">${escapeHtml(cat ? cat.name : "Unknown Category")}</div>
             </div>
             <div class="log-amount">${money(log.amount)}</div>
           </div>
           <div class="log-note">${escapeHtml(log.note || "No note")}</div>
           <div class="log-actions">
-            <button data-index="${actualIndex}" class="delete-btn">Delete Log</button>
+            <button class="delete-btn" data-id="${escapeHtml(log.id)}">Delete Log</button>
           </div>
         `;
         body.appendChild(item);
       });
-    }
 
-    document.querySelectorAll(".delete-btn").forEach(btn => {
-      btn.onclick = () => {
-        const idx = Number(btn.dataset.index);
-        if (idx >= 0) {
+      document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
           const ok = confirm("Delete this log?");
           if (!ok) return;
-          state.logs.splice(idx, 1);
+          state.logs = state.logs.filter(log => log.id !== id);
           render();
-        }
-      };
+        };
+      });
+    }
+
+    function renderSettingsCategoryList() {
+      const list = document.getElementById("categorySettingsList");
+      list.innerHTML = "";
+
+      state.categories.forEach(cat => {
+        const row = document.createElement("div");
+        row.className = "settings-row";
+        row.innerHTML = `
+          <input type="text" value="${escapeHtml(cat.name)}" data-role="name" data-id="${escapeHtml(cat.id)}" placeholder="Category name" />
+          <input type="number" value="${Number(cat.budget).toFixed(2)}" data-role="budget" data-id="${escapeHtml(cat.id)}" step="0.01" min="0" placeholder="Budget" />
+          <button class="secondary-btn" data-role="up" data-id="${escapeHtml(cat.id)}">Up</button>
+          <button class="danger" data-role="delete" data-id="${escapeHtml(cat.id)}">Delete</button>
+        `;
+        list.appendChild(row);
+      });
+
+      list.querySelectorAll('[data-role="delete"]').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          const cat = getCategoryById(id);
+          const count = state.logs.filter(log => log.categoryId === id).length;
+          const ok = confirm(`Delete "${cat?.name || "this category"}"? This will also remove ${count} related log(s).`);
+          if (!ok) return;
+          state.categories = state.categories.filter(cat => cat.id !== id);
+          state.logs = state.logs.filter(log => log.categoryId !== id);
+          renderSettingsCategoryList();
+          renderLogCategoryOptions();
+        };
+      });
+
+      list.querySelectorAll('[data-role="up"]').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          const index = state.categories.findIndex(cat => cat.id === id);
+          if (index > 0) {
+            [state.categories[index - 1], state.categories[index]] = [state.categories[index], state.categories[index - 1]];
+            renderSettingsCategoryList();
+          }
+        };
+      });
+    }
+
+    function syncSettingsInputsIntoState() {
+      state.currentBalance = Number(document.getElementById("currentBalanceInput").value || 0);
+
+      const names = [...document.querySelectorAll('[data-role="name"]')];
+      const budgets = [...document.querySelectorAll('[data-role="budget"]')];
+
+      state.categories = state.categories.map(cat => {
+        const nameInput = names.find(el => el.dataset.id === cat.id);
+        const budgetInput = budgets.find(el => el.dataset.id === cat.id);
+
+        return {
+          ...cat,
+          name: String(nameInput?.value || "Category").trim() || "Category",
+          budget: Number(budgetInput?.value || 0)
+        };
+      });
+    }
+
+    function render() {
+      saveState();
+      renderBudgetList();
+      renderSummaryCards();
+      renderTotalsGrid();
+      renderLogCategoryOptions();
+      renderLogs();
+      document.getElementById("currentBalanceInput").value = Number(state.currentBalance).toFixed(2);
+      renderSettingsCategoryList();
+      document.getElementById("backupBox").value = exportJsonString();
+    }
+
+    document.getElementById("menuBtn").addEventListener("click", () => openOverlay("menuOverlay"));
+    document.getElementById("logToggleBtn").addEventListener("click", () => {
+      renderLogCategoryOptions();
+      openOverlay("logOverlay");
     });
-  }
+    document.getElementById("openSettingsBtn").addEventListener("click", () => {
+      closeOverlay("menuOverlay");
+      document.getElementById("currentBalanceInput").value = Number(state.currentBalance).toFixed(2);
+      renderSettingsCategoryList();
+      openOverlay("settingsOverlay");
+    });
+    document.getElementById("openBackupBtn").addEventListener("click", () => {
+      closeOverlay("menuOverlay");
+      document.getElementById("backupBox").value = exportJsonString();
+      openOverlay("backupOverlay");
+    });
 
-  function wireEvents() {
-    const menuBtn = getEl("menuBtn");
-    if (menuBtn) {
-      menuBtn.addEventListener("click", () => {
-        openOverlay("menuOverlay");
-      });
-    }
-
-    const logToggleBtn = getEl("logToggleBtn");
-    if (logToggleBtn) {
-      logToggleBtn.addEventListener("click", () => {
-        openOverlay("logOverlay");
-      });
-    }
-
-    const openBudgetSettingsBtn = getEl("openBudgetSettingsBtn");
-    if (openBudgetSettingsBtn) {
-      openBudgetSettingsBtn.addEventListener("click", () => {
-        closeOverlay("menuOverlay");
-        openOverlay("settingsOverlay");
-      });
-    }
-
-    const openBackupBtn = getEl("openBackupBtn");
-    if (openBackupBtn) {
-      openBackupBtn.addEventListener("click", () => {
-        closeOverlay("menuOverlay");
-        openOverlay("backupOverlay");
-      });
-    }
-
-    const closeMenuSheetBtn = getEl("closeMenuSheetBtn");
-    if (closeMenuSheetBtn) {
-      closeMenuSheetBtn.addEventListener("click", () => {
-        closeOverlay("menuOverlay");
-      });
-    }
-
-    const closeLogModalBtn = getEl("closeLogModalBtn");
-    if (closeLogModalBtn) {
-      closeLogModalBtn.addEventListener("click", () => {
-        closeOverlay("logOverlay");
-      });
-    }
-
-    const closeSettingsModalBtn = getEl("closeSettingsModalBtn");
-    if (closeSettingsModalBtn) {
-      closeSettingsModalBtn.addEventListener("click", () => {
-        closeOverlay("settingsOverlay");
-      });
-    }
-
-    const closeBackupModalBtn = getEl("closeBackupModalBtn");
-    if (closeBackupModalBtn) {
-      closeBackupModalBtn.addEventListener("click", () => {
-        closeOverlay("backupOverlay");
-      });
-    }
+    document.getElementById("closeMenuSheetBtn").addEventListener("click", () => closeOverlay("menuOverlay"));
+    document.getElementById("closeLogModalBtn").addEventListener("click", () => closeOverlay("logOverlay"));
+    document.getElementById("closeSettingsModalBtn").addEventListener("click", () => closeOverlay("settingsOverlay"));
+    document.getElementById("closeBackupModalBtn").addEventListener("click", () => closeOverlay("backupOverlay"));
 
     ["menuOverlay", "logOverlay", "settingsOverlay", "backupOverlay"].forEach(id => {
-      const overlay = getEl(id);
-      if (!overlay) return;
-      overlay.addEventListener("click", (e) => {
+      const overlay = document.getElementById(id);
+      overlay.addEventListener("click", e => {
         if (e.target === overlay) closeOverlay(id);
       });
     });
 
-    const addLogBtn = getEl("addLogBtn");
-    if (addLogBtn) {
-      addLogBtn.addEventListener("click", () => {
-        const date = getEl("logDate")?.value || "";
-        const category = normalizeCategory(getEl("logCategory")?.value || "");
-        const amount = Number(getEl("logAmount")?.value || 0);
-        const note = (getEl("logNote")?.value || "").trim();
+    document.getElementById("addLogBtn").addEventListener("click", () => {
+      const date = document.getElementById("logDate").value;
+      const categoryId = document.getElementById("logCategory").value;
+      const amount = Number(document.getElementById("logAmount").value);
+      const note = document.getElementById("logNote").value.trim();
 
-        if (!date) return alert("Pick a date.");
-        if (!amount || amount <= 0) return alert("Enter a valid amount.");
-        if (!category) return alert("Pick a category.");
+      if (!state.categories.length) return alert("Add a category first.");
+      if (!date) return alert("Pick a date.");
+      if (!categoryId) return alert("Pick a category.");
+      if (!amount || amount <= 0) return alert("Enter a valid amount.");
 
-        state.logs.push({ date, category, amount, note });
+      state.logs.push({
+        id: uid(),
+        date,
+        categoryId,
+        amount,
+        note
+      });
 
-        if (getEl("logAmount")) getEl("logAmount").value = "";
-        if (getEl("logNote")) getEl("logNote").value = "";
+      document.getElementById("logAmount").value = "";
+      document.getElementById("logNote").value = "";
+      render();
+      closeOverlay("logOverlay");
+    });
 
+    document.getElementById("addCategoryBtn").addEventListener("click", () => {
+      syncSettingsInputsIntoState();
+      state.categories.push({
+        id: uid(),
+        name: "New Category",
+        budget: 0
+      });
+      renderSettingsCategoryList();
+    });
+
+    document.getElementById("saveSettingsBtn").addEventListener("click", () => {
+      syncSettingsInputsIntoState();
+      render();
+      closeOverlay("settingsOverlay");
+    });
+
+    document.getElementById("resetLogsBtn").addEventListener("click", () => {
+      const ok = confirm("Clear all saved logs?");
+      if (!ok) return;
+      state.logs = [];
+      render();
+      closeOverlay("settingsOverlay");
+    });
+
+    document.getElementById("resetAllBtn").addEventListener("click", () => {
+      const ok = confirm("Reset the whole tracker? This wipes categories, logs, and balance.");
+      if (!ok) return;
+      state = defaultState();
+      render();
+      closeOverlay("settingsOverlay");
+    });
+
+    document.getElementById("copyDataBtn").addEventListener("click", async () => {
+      const text = exportJsonString();
+      document.getElementById("backupBox").value = text;
+      await copyText(text);
+    });
+
+    document.getElementById("loadDataBtn").addEventListener("click", () => {
+      const raw = document.getElementById("backupBox").value.trim();
+      if (!raw) return alert("Paste JSON into the box first.");
+
+      try {
+        const parsed = JSON.parse(raw);
+
+        const nextState = {
+          currentBalance: Number(parsed?.currentBalance || 0),
+          categories: Array.isArray(parsed?.categories)
+            ? parsed.categories.map(cat => ({
+                id: String(cat.id || uid()),
+                name: String(cat.name || "Category"),
+                budget: Number(cat.budget || 0)
+              }))
+            : [],
+          logs: Array.isArray(parsed?.logs)
+            ? parsed.logs.map(log => ({
+                id: String(log.id || uid()),
+                date: String(log.date || ""),
+                categoryId: String(log.categoryId || ""),
+                amount: Number(log.amount || 0),
+                note: String(log.note || "")
+              }))
+            : []
+        };
+
+        if (!nextState.categories.length) return alert("That JSON does not have valid categories.");
+        nextState.logs = nextState.logs.filter(log =>
+          nextState.categories.some(cat => cat.id === log.categoryId)
+        );
+
+        state = nextState;
         render();
-        closeOverlay("logOverlay");
-      });
-    }
+        alert("Loaded.");
+      } catch (e) {
+        alert("That JSON could not be loaded.");
+      }
+    });
 
-    const saveBudgetBtn = getEl("saveBudgetBtn");
-    if (saveBudgetBtn) {
-      saveBudgetBtn.addEventListener("click", () => {
-        const currentBalanceInput = getEl("currentBalanceInput");
-        const gasBudgetInput = getEl("gasBudgetInput");
-        const groceriesBudgetInput = getEl("groceriesBudgetInput");
-        const playBudgetInput = getEl("playBudgetInput");
-        const bufferInput = getEl("bufferInput");
-
-        state.currentBalance = Number(currentBalanceInput?.value || state.currentBalance || 0);
-        state.budgets.gas = Number(gasBudgetInput?.value || 0);
-        state.budgets.groceries = Number(groceriesBudgetInput?.value || 0);
-        state.budgets.play = Number(playBudgetInput?.value || 0);
-        state.budgets.buffer = Number(bufferInput?.value || 0);
-
-        render();
-        closeOverlay("settingsOverlay");
-      });
-    }
-
-    const resetMonthBtn = getEl("resetMonthBtn");
-    if (resetMonthBtn) {
-      resetMonthBtn.addEventListener("click", () => {
-        if (!confirm("Clear all saved logs?")) return;
-        state.logs = [];
-        render();
-        closeOverlay("settingsOverlay");
-      });
-    }
-
-    const copyDataBtn = getEl("copyDataBtn");
-    if (copyDataBtn) {
-      copyDataBtn.addEventListener("click", async () => {
-        const text = exportJsonString();
-        const backupBox = getEl("backupBox");
-        if (backupBox) backupBox.value = text;
-        await copyText(text);
-      });
-    }
-
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener("keydown", e => {
       if (e.key === "Escape") closeAllOverlays();
     });
-  }
-
-  function setDefaultDate() {
-    const logDate = getEl("logDate");
-    if (!logDate) return;
 
     const today = new Date();
     const pad = n => String(n).padStart(2, "0");
-    logDate.value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
-  }
+    document.getElementById("logDate").value = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 
-  wireEvents();
-  setDefaultDate();
-  render();
-</script>
-
-
-
-
+    render();
+  </script>
 </body>
 </html>
